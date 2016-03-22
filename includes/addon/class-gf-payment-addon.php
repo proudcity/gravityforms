@@ -1200,6 +1200,12 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			$action['transaction_type'] = 'payment';
 		}
 
+		// Set payment status back to active if a previous payment attempt failed.
+		if ( strtolower( $entry['payment_status'] ) != 'active' ) {
+			$entry['payment_status'] = 'Active';
+			GFAPI::update_entry_property( $entry['id'], 'payment_status', 'Active' );
+		}
+
 		if ( ! $action['note'] ) {
 			$amount_formatted = GFCommon::to_money( $action['amount'], $entry['currency'] );
 			$action['note']   = sprintf( esc_html__( 'Subscription has been paid. Amount: %s. Subscription Id: %s', 'gravityforms' ), $amount_formatted, $action['subscription_id'] );

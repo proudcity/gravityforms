@@ -946,11 +946,11 @@ class GFMailChimp extends GFFeedAddOn {
 				require_once( 'api/Mailchimp.php' );
 			}
 
-			$apikey = $settings['apiKey'];
+			$apikey = trim( $settings['apiKey'] );
 			$this->log_debug( __METHOD__ . '(): Retrieving API Info for key ' . $apikey );
 
 			try {
-				$api = new Mailchimp( trim( $apikey ), null );
+				$api = new Mailchimp( $apikey, null );
 			} catch ( Exception $e ) {
 				$this->log_error( __METHOD__ . '(): Failed to set up the API.' );
 				$this->log_error( __METHOD__ . '(): ' . $e->getCode() . ' - ' . $e->getMessage() );
@@ -965,6 +965,14 @@ class GFMailChimp extends GFFeedAddOn {
 
 		if ( ! is_object( $api ) ) {
 			$this->log_error( __METHOD__ . '(): Failed to set up the API.' );
+
+			return null;
+		}
+
+		try {
+			$api->call( 'helper/ping', array( $apikey ) );
+		} catch ( Exception $e ) {
+			$this->log_error( __METHOD__ . '(): ' . $e->getCode() . ' - ' . $e->getMessage() );
 
 			return null;
 		}

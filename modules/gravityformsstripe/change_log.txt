@@ -1,4 +1,21 @@
 ---------------------------------------------------
+Version 2.0.5
+    - Fixed an issue with the trial property from the $submission_data not being used when generating the plan id.
+
+---------------------------------------------------
+Version 2.0.4
+    - Fixed an issue with the trial property from the $submission_data not being used.
+
+---------------------------------------------------
+Version 2.0.3
+    - Fixed an issue with the card type validation.
+    - Fixed an issue which caused the credit card field required indicator to be missing when the form is displayed after a validation failure.
+
+---------------------------------------------------
+Version 2.0.2
+    - Added logging of error retrieving Stripe Event object.
+
+---------------------------------------------------
 Version 2.0.1
     - Added the 'gform_stripe_customer_after_create' hook allowing custom actions to be performed between the customer being created and subscribed to the plan. See https://www.gravityhelp.com/documentation/article/gform_stripe_customer_after_create/
 

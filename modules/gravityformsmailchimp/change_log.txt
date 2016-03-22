@@ -1,4 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 3.7.2
+    - Fixed an issue which was preventing feed processing aborting early if there is an issue with the MailChimp API.
+
+------------------------------------------------------------------------------------------------------------------
 Version 3.7.1
     - Fixed an issue where the cached settings were not cleared when the add-on was uninstalled.
     - Fixed a rare issue for some server environments where several groups could be assigned the same settings key causing js issues in the feed editor.

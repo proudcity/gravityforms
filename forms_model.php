@@ -3040,7 +3040,7 @@ class GFFormsModel {
 
 	}
 
-	private static function media_handle_upload( $url, $post_id, $post_data = array() ) {
+	public static function media_handle_upload( $url, $post_id, $post_data = array() ) {
 
 		//WordPress Administration API required for the media_handle_upload() function
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
@@ -4899,7 +4899,7 @@ class GFFormsModel {
 		return strtolower( $search_mode ) == 'any' ? 'OR' : 'AND';
 	}
 
-	private static function get_lead_db_columns() {
+	public static function get_lead_db_columns() {
 		return array( 'id', 'form_id', 'post_id', 'date_created', 'is_starred', 'is_read', 'ip', 'source_url', 'user_agent', 'currency', 'payment_status', 'payment_date', 'payment_amount', 'transaction_id', 'is_fulfilled', 'created_by', 'transaction_type', 'status', 'payment_method' );
 	}
 
