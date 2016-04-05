@@ -278,7 +278,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			$this->log_debug( __METHOD__ . "(): Authorization result for form #{$form['id']} submission => " . print_r( $this->authorization, 1 ) );
 		}
 
-		if ( $performed_authorization && ! $this->authorization['is_authorized'] ) {
+		if ( $performed_authorization && ! rgar( $this->authorization, 'is_authorized' ) ) {
 			$validation_result = $this->get_validation_result( $validation_result, $this->authorization );
 
 			//Setting up current page to point to the credit card page since that will be the highlighted field
