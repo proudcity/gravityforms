@@ -886,7 +886,7 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 			}
 
 			//add the bn code (build notation code)
-			$nvpstr = "BUTTONSOURCE=Rocketgenius_SP&$nvpstr";
+			$nvpstr = "BUTTONSOURCE=ProudCity_SP&$nvpstr";
 
 			// Set the API operation, version, and API signature in the request.
 			$nvpreq = "VENDOR=$Vendor&PARTNER=$Partner&PWD=$API_Password&USER=$API_UserName&$nvpstr";
