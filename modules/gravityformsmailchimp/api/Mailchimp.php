@@ -167,6 +167,13 @@ class Mailchimp {
         curl_setopt($this->ch, CURLOPT_TIMEOUT, $opts['timeout']);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 
+        if ( defined( 'WP_PROXY_HOST' ) ) {
+            curl_setopt( $this->ch, CURLOPT_PROXY, WP_PROXY_HOST );
+        }
+        
+        if ( defined( 'WP_PROXY_PORT' ) ) {
+            curl_setopt( $this->ch, CURLOPT_PROXYPORT, WP_PROXY_PORT );
+        }
 
         $this->folders = new Mailchimp_Folders($this);
         $this->templates = new Mailchimp_Templates($this);

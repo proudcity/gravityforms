@@ -497,6 +497,13 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 		 */
 		$args = apply_filters( 'gform_paypalpaymentspro_args_before_payment', $args, $form['id'], $submission_data, $feed, $entry );
 
+		if ( empty( $args['ACCT'] ) ) {
+			return array(
+				'is_authorized' => false,
+				'error_message' => esc_html__( 'Please enter your credit card information.', 'gravityformspaypalpaymentspro' ),
+			);
+		}
+
 		$settings = $this->get_plugin_settings();
 		$response = $this->post_to_payflow( $args, $settings, $form['id'] );
 
@@ -574,6 +581,13 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 		 * @param array $entry The entry object currently being processed.
 		 */
 		$subscription = apply_filters( 'gform_paypalpaymentspro_args_before_subscription', $subscription, $form['id'], $submission_data, $feed, $entry );
+
+		if ( empty( $subscription['ACCT'] ) ) {
+			return array(
+				'is_success' => false,
+				'error_message' => esc_html__( 'Please enter your credit card information.', 'gravityformspaypalpaymentspro' ),
+			);
+		}
 
 		$this->log_debug( __METHOD__ . '(): Creating recurring profile.' );
 		$settings = $this->get_plugin_settings();
@@ -683,8 +697,10 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 								gform_update_meta( $entry_id, 'subscription_payment_count', $new_payment_count );
 								gform_update_meta( $entry_id, 'subscription_payment_date', $new_payment_date );
 
-								$action = array( 'amount'          => $new_payment_amount,
-								                 'subscription_id' => $subscription_id,
+								$action = array(
+									'amount'          => $new_payment_amount,
+									'subscription_id' => $subscription_id,
+									'type'            => 'add_subscription_payment'
 								);
 								$this->add_subscription_payment( $entry, $action );
 
@@ -696,7 +712,10 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 
 						case 'expired' :
 
-							$action = array( 'subscription_id' => $subscription_id );
+							$action = array(
+								'subscription_id' => $subscription_id,
+								'type'            => 'expire_subscription'
+							);
 							$this->expire_subscription( $entry, $action );
 
 							//deprecated
@@ -867,12 +886,16 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 			}
 
 			//add the bn code (build notation code)
-			$nvpstr = "BUTTONSOURCE=ProudCity_SP&$nvpstr";
+			$nvpstr = "BUTTONSOURCE=Rocketgenius_SP&$nvpstr";
 
 			// Set the API operation, version, and API signature in the request.
 			$nvpreq = "VENDOR=$Vendor&PARTNER=$Partner&PWD=$API_Password&USER=$API_UserName&$nvpstr";
 
-			$this->log_debug( __METHOD__ . "(): Sending request to PayPal - URL: {$API_Endpoint} Request: {$nvpreq}" );
+			$this->log_debug( __METHOD__ . "(): Sending request to PayPal - URL: {$API_Endpoint}." );
+
+			if ( apply_filters( 'gform_paypalpaymentspro_log_api_request', false ) ) {
+				$this->log_debug( __METHOD__ . "(): Request: {$nvpreq}." );
+			}
 
 			// Set the request as a POST FIELD for curl.
 			curl_setopt( $ch, CURLOPT_POSTFIELDS, $nvpreq );
@@ -915,6 +938,10 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 	 * @return array
 	 */
 	public function prepare_credit_card_transaction( $feed, $submission_data, $form, $entry ) {
+
+		$feed_name = rgar( $feed['meta'], 'feedName' );
+		$this->log_debug( __METHOD__ . "(): Preparing transaction arguments based on feed #{$feed['id']} - {$feed_name}." );
+		$this->log_debug( __METHOD__ . '(): $submission_data line_items => ' . print_r( $submission_data['line_items'], 1 ) );
 
 		// Billing Information
 		$card_number     = $submission_data['card_number'];

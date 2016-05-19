@@ -1,4 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 3.7.3
+    - Updated the MailChimp API to support the WP_PROXY_HOST and WP_PROXY_PORT constants when configuring the cURL options.
+
+------------------------------------------------------------------------------------------------------------------
 Version 3.7.2
     - Fixed an issue which was preventing feed processing aborting early if there is an issue with the MailChimp API.
 
