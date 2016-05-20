@@ -208,7 +208,11 @@ class GFCommon {
 			$decimal_char = '.';
 		} else if ( $number_format == 'decimal_comma' ) {
 			$decimal_char = ',';
+		} else if ($number_format == 'currency' ){
+			$currency = RGCurrency::get_currency( GFCommon::get_currency() );
+			$decimal_char = $currency['decimal_separator'];
 		}
+
 
 		$float_number = '';
 		$clean_number = '';

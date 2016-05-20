@@ -2067,7 +2067,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 				$order_by      = 'year desc, month desc';
 				$join          = 'lead.month = transaction.month';
 
-				$data['chart']['hAxis']['column'] = 'month_abbrev';
+				$data['chart']['hAxis']['column'] = 'month_year';
 				$data['chart']['hAxis']['label']  = esc_html__( 'Month', 'gravityforms' );
 				$data['table']['header']          = array_merge( array( 'month_year' => esc_html__( 'Month', 'gravityforms' ) ), $data['table']['header'] );
 				break;

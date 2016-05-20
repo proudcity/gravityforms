@@ -1,4 +1,4 @@
-gravityforms 1.9.19
+gravityforms 1.9.19.4
 gravityformsmailchimp 3.7.3
 gravityformspaypalpaymentspro 2.0.2
 gravityformspaypalpro 1.6.3
