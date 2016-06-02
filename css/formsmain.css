@@ -4,7 +4,7 @@
 Gravity Forms Front End Form Styles
 Version 1.9
 http: //www.gravityforms.com
-updated: February 10, 2016 2:20 PM EST
+updated: May 24, 2016 3:37 PM GMT-5
 
 Gravity Forms is a Rocketgenius project
 copyright 2008-2016 Rocketgenius Inc.
@@ -1330,6 +1330,13 @@ body .gform_wrapper img.add_list_item, body .gform_wrapper img.delete_list_item 
 .gform_wrapper li.gfield ul.gfield_radio li input[type="radio"] + input[type="text"] { width: 45.25% }
 .gform_wrapper table.recaptchatable {
     table-layout: auto;
+}
+
+/* adjusting the caption margin for left or right label settings */
+
+.gform_wrapper ul.gform_fields.left_label div.ginput_container_captcha,
+.gform_wrapper ul.gform_fields.right_label div.ginput_container_captcha {
+    margin-left: 30%;
 }
 
 /* adjusting the address field alignment for some scenarios */

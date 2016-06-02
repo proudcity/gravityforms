@@ -4,14 +4,14 @@
 Plugin Name: Gravity Forms Zapier Add-on
 Plugin URI: http://www.gravityforms.com
 Description: Integrates Gravity Forms with Zapier allowing form submissions to be automatically sent to your configured Zaps.
-Version: 1.8
+Version: 1.8.3
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityformszapier
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2009-2015 rocketgenius
+Copyright 2009-2016 rocketgenius
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,8 +36,10 @@ class GFZapier {
 	private static $slug = "gravityformszapier";
 	private static $path = "gravityformszapier/zapier.php";
     private static $url = "http://www.gravityforms.com";
-    private static $version = "1.8";
-    private static $min_gravityforms_version = "1.7.6";
+    private static $version = "1.8.3";
+    private static $min_gravityforms_version = "1.9";
+
+	private static $_current_body = null;
 
 	public static function init(){
 
@@ -76,8 +78,12 @@ class GFZapier {
         	add_action("gform_after_save_form", array("GFZapier", 'send_form_updates'), 10, 2);
 
 			// paypal standard plugin integration hooks
-			add_action( 'gform_paypal_action_fields', array( 'GFZapier', 'add_paypal_settings' ), 10, 2 );
-			add_filter( 'gform_paypal_save_config', array( 'GFZapier', 'save_paypal_settings' ) );
+			if ( self::is_gravityforms_supported( '2.0-beta-2' ) ) {
+				add_filter( 'gform_gravityformspaypal_feed_settings_fields', array( 'GFZapier', 'add_paypal_post_payment_actions' ), 10, 2 );
+			} else {
+				add_action( 'gform_paypal_action_fields', array( 'GFZapier', 'add_paypal_settings' ), 10, 2 );
+				add_filter( 'gform_paypal_save_config', array( 'GFZapier', 'save_paypal_settings' ) );
+			}
 
         	if (RGForms::get("page") == "gf_settings") {
 				//add Zapier link to settings tabs on GF Main Settings page
@@ -345,6 +351,11 @@ class GFZapier {
                 <?php
                     $button_label = $is_new_zap ? __("Save Zapier Feed", "gravityformszapier") : __("Update Zapier Feed", "gravityformszapier");
                     $zapier_button = '<input class="button-primary" type="submit" value="' . $button_label . '" name="save"/>';
+                    /**
+                     * A filter allowing for the modification of the save button for saving a Zapier Feed (A conditional).
+                     *
+                     * @param string $zapier_button The HTML rendered for the save button.
+                     */
                     echo apply_filters("gform_save_zapier_button", $zapier_button);
                 ?>
             </p>
@@ -521,7 +532,31 @@ class GFZapier {
 
 			return false;
 		}
+		
+		$is_entry = ! empty( $entry );
+		$is_entry ? self::log_debug( 'Gathering entry data to send submission.' ) : self::log_debug( 'Gathering field data to send dummy submission.' );
 
+		$retval = true;
+		foreach ( $zaps as $zap ) {
+			//checking to see if a condition was specified, and if so, met, otherwise don't send to zapier
+			//only check this when there is an entry, simple form updates should go to zapier regardless of conditions existing
+			if ( ! $is_entry || ( $is_entry && self::conditions_met( $form, $zap, $entry ) ) ) {
+				if ( $is_entry ) {
+					self::log_debug( 'No condition specified or a condition was specified and met, sending to Zapier' );
+				}
+
+				$retval = self::process_feed( $zap, $entry, $form );
+
+			} else {
+				self::log_debug( 'A condition was specified and not met, not sending to Zapier' );
+				$retval = false;
+			}
+		}
+
+		return $retval;
+	}
+
+	public static function process_feed( $feed, $entry, $form ) {
 		$body = self::get_body( $entry, $form );
 
 		$headers = array();
@@ -536,37 +571,34 @@ class GFZapier {
 			return false;
 		}
 
-		$is_entry = ! empty( $entry );
-		$is_entry ? self::log_debug( 'Gathering entry data to send submission.' ) : self::log_debug( 'Gathering field data to send dummy submission.' );
+		self::log_debug( 'Posting to url: ' . $feed['url'] . ' data: ' . print_r( $body, true ) );
 
-		$retval = true;
-		foreach ( $zaps as $zap ) {
-			//checking to see if a condition was specified, and if so, met, otherwise don't send to zapier
-			//only check this when there is an entry, simple form updates should go to zapier regardless of conditions existing
-			if ( ! $is_entry || ( $is_entry && self::conditions_met( $form, $zap, $entry ) ) ) {
-				if ( $is_entry ) {
-					self::log_debug( 'No condition specified or a condition was specified and met, sending to Zapier' );
-				}
+		$form_data = array( 'sslverify' => false, 'ssl' => true, 'body' => $json_body, 'headers' => $headers );
+		$response  = wp_remote_post( $feed['url'], $form_data );
 
-				$form_data = array( 'sslverify' => false, 'ssl' => true, 'body' => $json_body, 'headers' => $headers );
-				self::log_debug( 'Posting to url: ' . $zap['url'] . ' data: ' . print_r( $body, true ) );
-				$response = wp_remote_post( $zap['url'], $form_data );
-				if ( is_wp_error( $response ) ) {
-					self::log_error( 'The following error occurred: ' . print_r( $response, true ) );
-					$retval = false;
-				} else {
-					self::log_debug( 'Successful response from Zap: ' . print_r( $response, true ) );
-				}
-			} else {
-				self::log_debug( 'A condition was specified and not met, not sending to Zapier' );
-				$retval = false;
+		if ( is_wp_error( $response ) ) {
+			self::log_error( 'The following error occurred: ' . print_r( $response, true ) );
+
+			return false;
+		} else {
+			self::log_debug( 'Successful response from Zap: ' . print_r( $response, true ) );
+
+			if ( ! empty( $entry ) ) {
+				self::log_debug( 'Marking entry #' . $entry['id'] . ' as fulfilled.' );
+				gform_update_meta( $entry['id'], self::$slug . '_is_fulfilled', true );
 			}
-		}
 
-		return $retval;
+			return true;
+		}
 	}
 
 	public static function get_body( $entry, $form ) {
+		$current_body = self::$_current_body;
+		
+		if ( is_array( $current_body ) ) {
+			return $current_body;
+		}
+		
 		$body = array();
 		foreach ( $form['fields'] as $field ) {
 			$input_type = GFFormsModel::get_input_type( $field );
@@ -577,7 +609,7 @@ class GFZapier {
 
 			$field_value = GFFormsModel::get_lead_field_value( $entry, $field );
 			if ( ! empty( $entry ) ) {
-				$field_value = apply_filters( 'gform_zapier_field_value', $field_value, $form['id'], $field['id'], $entry );
+				$field_value = apply_filters( 'gform_zapier_field_value', $field_value, $form['id'], $field->id, $entry );
 			}
 
 			$field_label = GFFormsModel::get_label( $field );
@@ -620,17 +652,23 @@ class GFZapier {
 				$body[ $field_label ] = rgblank( $field_value ) ? '' : $field_value;
 			}
 		}
-		$entry_meta = GFFormsModel::get_entry_meta( ( $form['id'] ) );
+		$entry_meta = GFFormsModel::get_entry_meta( $form['id'] );
 		foreach ( $entry_meta as $meta_key => $meta_config ) {
 			$body[ $meta_config['label'] ] = empty( $entry ) ? null : rgar( $entry, $meta_key );
 		}
+		
+		self::$_current_body = $body;
 
 		return $body;
 	}
 
-	private static function is_gravityforms_supported(){
+	private static function is_gravityforms_supported( $min_gravityforms_version = '' ){
         if(class_exists("GFCommon")){
-            $is_correct_version = version_compare(GFCommon::$version, self::$min_gravityforms_version, ">=");
+	        if ( empty( $min_gravityforms_version ) ) {
+		        $min_gravityforms_version = self::$min_gravityforms_version;
+	        }
+
+            $is_correct_version = version_compare(GFCommon::$version, $min_gravityforms_version, ">=");
             return $is_correct_version;
         }
         else{
@@ -904,7 +942,60 @@ class GFZapier {
 		}
 	}
 
-	//These are functions copied from the add-on framework and modified as needed to support the PayPal delay
+	/**
+	 * Add the Post Payment Actions setting to the PayPal feed.
+	 *
+	 * @param array $feed_settings_fields The PayPal feed settings.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @return array
+	 */
+	public static function add_paypal_post_payment_actions( $feed_settings_fields, $paypal ) {
+
+		$form_id = absint( rgget( 'id' ) );
+		$feeds   = GFZapierData::get_feed_by_form( $form_id, true );
+		if ( count( $feeds ) > 0 ) {
+
+			$choice = array(
+				'label' => esc_html__( 'Send feed to Zapier only when payment is received.', 'gravityformszapier' ),
+				'name'  => 'delay_gravityformszapier',
+			);
+
+			$field_name = 'post_payment_actions';
+			$field      = $paypal->get_field( $field_name, $feed_settings_fields );
+
+			if ( ! $field ) {
+
+				$fields = array(
+					array(
+						'name'    => $field_name,
+						'label'   => esc_html( 'Post Payment Actions', 'gravityforms' ),
+						'type'    => 'checkbox',
+						'choices' => array( $choice ),
+						'tooltip' => '<h6>' . esc_html__( 'Post Payment Actions', 'gravityforms' ) . '</h6>' . esc_html__( 'Select which actions should only occur after payment has been received.', 'gravityforms' )
+					)
+				);
+
+				$feed_settings_fields = $paypal->add_field_after( 'options', $fields, $feed_settings_fields );
+
+			} else {
+
+				$field['choices'][]   = $choice;
+				$feed_settings_fields = $paypal->replace_field( $field_name, $field, $feed_settings_fields );
+
+			}
+		}
+
+		return $feed_settings_fields;
+	}
+
+	/**
+	 * Add PayPal delay setting for Gravity Forms < 2.0.
+	 * 
+	 * @deprecated 1.8.2
+	 * @todo Remove once $min_gravityforms_version reaches 2.0.
+	 */
 	public static function add_paypal_settings( $feed, $form ) {
 		//this function was copied from the feed framework since this add-on has not yet been migrated
 		$form_id        = rgar( $form, 'id' );
@@ -959,6 +1050,12 @@ class GFZapier {
 	<?php
 	}
 
+	/**
+	 * Save PayPal delay setting for Gravity Forms < 2.0.
+	 *
+	 * @deprecated 1.8.2
+	 * @todo Remove once $min_gravityforms_version reaches 2.0.
+	 */
 	public static function save_paypal_settings( $feed ) {
 		$feed['meta'][ 'delay_gravityformszapier' ] = rgpost( 'paypal_delay_gravityformszapier' );
 
@@ -1070,6 +1167,15 @@ class GFZapier {
 	}
 
 	public static function paypal_fulfillment( $entry, $feed, $transaction_id, $amount ) {
+
+		self::log_debug( 'Checking PayPal fulfillment for transaction ' . $transaction_id );
+		$is_fulfilled = gform_get_meta( $entry['id'], self::$slug . '_is_fulfilled' );
+		if ( $is_fulfilled ) {
+			self::log_debug( 'Entry ' . $entry['id'] . ' is already fulfilled for ' . self::$slug . '. No action necessary.' );
+
+			return false;
+		}
+
 		//get zaps for form
 		$form_id = $entry['form_id'];
 		$zaps    = GFZapierData::get_feed_by_form( $form_id, true );
@@ -1170,6 +1276,11 @@ class GFZapierTable extends WP_List_Table {
 
     function column_name($item) {
         $edit_url = add_query_arg(array("zid" => $item["id"]));
+        /**
+         * A filter to allow modification of Zapier Feed actions (Delete a feed and edit).
+         *
+         * @param array An array for the Edit and Delete actions for a Zapier Feed (Include all the HTML for each action link).
+         */
         $actions = apply_filters('gform_zapier_actions', array(
             'edit' => '<a title="' . __('Edit this item', 'gravityformszapier') . '" href="' . esc_url( $edit_url ) . '">' . __('Edit', 'gravityformszapier') . '</a>',
             'delete' => '<a title="' . __('Delete this item', 'gravityformszapier') . '" class="submitdelete" onclick="javascript: if(confirm(\'' . __("WARNING: You are about to delete this Zapier feed.", "gravityformszapier") . __("\'Cancel\' to stop, \'OK\' to delete.", "gravityforms") . '\')){ DeleteZap(\'' . esc_js( $item["id"] ) . '\'); }" style="cursor:pointer;">' . __('Delete', 'gravityformszapier') . '</a>'
