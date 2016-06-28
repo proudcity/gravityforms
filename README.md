@@ -1,5 +1,26 @@
-# ProudCity Gravity Forms
+Gravity Forms
+==============================
 
-This is a private repo because Gravityforms is not 100% opensource.  The root folder is the standard Gravityforms installation. Within `./modules` are the Gravityforms Addons that come standard on the ProudCity Platform.
+[![Build Status](https://travis-ci.com/gravityforms/gravityforms.svg?token=dWdigWFPjUjwVzDjbyxv&branch=master)](https://travis-ci.com/gravityforms/gravityforms)
 
-When updating the PayPal plugins, replace "Rocketgenius_SP" with "ProudCity_SP" to add our PayPal referral code (https://github.com/proudcity/wp-proudcity/issues/275).
+This repository contains the development version of Gravity Forms intended to facilitate communication with developers. It is not stable and not intended for installation on production sites.
+
+## Installation Instructions
+The only thing you need to do to get this development version working is clone this repository into your plugins directory and activate script debug mode. If you try to use this version without script mode on the scripts and styles will not load and it will not work properly.
+
+To enable script debug mode just add the following line to your wp-config.php file:
+
+define( 'SCRIPT_DEBUG', true );
+
+
+## Unit Tests
+
+The unit tests can be installed from the terminal using:
+
+    bash tests/bin/install.sh [DB_NAME] [DB_USER] [DB_PASSWORD] [DB_HOST]
+
+
+If you're using VVV you can use this command:
+
+	bash tests/bin/install.sh wordpress_unit_tests root root localhost
+
