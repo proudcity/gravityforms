@@ -434,7 +434,7 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 		               'ACTION'        => 'C'
 		);
 
-		$settings = $this->get_plugin_settings();
+		$settings = $this->get_api_settings( $feed );
 		$response = $this->post_to_payflow( $args, $settings, $entry['form_id'] );
 
 		if ( ! empty( $response ) && $response['RESULT'] == '0' ) {
@@ -504,7 +504,7 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 			);
 		}
 
-		$settings = $this->get_plugin_settings();
+		$settings = $this->get_api_settings( $feed );
 		$response = $this->post_to_payflow( $args, $settings, $form['id'] );
 
 		if ( isset( $response['RESULT'] ) && $response['RESULT'] == 0 ) {
@@ -590,7 +590,7 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 		}
 
 		$this->log_debug( __METHOD__ . '(): Creating recurring profile.' );
-		$settings = $this->get_plugin_settings();
+		$settings = $this->get_api_settings( $feed );
 		$response = $this->post_to_payflow( $subscription, $settings, $form['id'] );
 
 		if ( $response['RESULT'] == 0 ) {
@@ -677,7 +677,7 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 					$profile_status_request['ORIGPROFILEID'] = $subscription_id;
 					//$profile_status_request['PAYMENTHISTORY'] = 'Y';
 
-					$settings       = $this->get_plugin_settings();
+					$settings       = $this->get_api_settings( $feed );
 					$profile_status = $this->post_to_payflow( $profile_status_request, $settings, $form_id );
 
 					$status          = $profile_status['STATUS'];
@@ -744,6 +744,34 @@ class GFPayPalPaymentsPro extends GFPaymentAddOn {
 
 
 	// # HELPERS -------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Retrieve the settings to use when making the request to PayPal API.
+	 * 
+	 * @param bool|array $feed False or the feed currently being processed.
+	 *
+	 * @return array
+	 */
+	public function get_api_settings( $feed = false ) {
+		if ( ! $feed ) {
+			$feed = $this->current_feed;
+		}
+
+		if ( $feed && rgars( $feed, 'meta/apiSettingsEnabled' ) ) {
+			$meta     = $feed['meta'];
+			$settings = array(
+				'mode'     => rgar( $meta, 'overrideMode' ),
+				'username' => rgar( $meta, 'overrideUsername' ),
+				'password' => rgar( $meta, 'overridePassword' ),
+				'vendor'   => rgar( $meta, 'overrideVendor' ),
+				'partner'  => rgar( $meta, 'overridePartner' ),
+			);
+		} else {
+			$settings = $this->get_plugin_settings();
+		}
+
+		return $settings;
+	}
 
 	/**
 	 * Maybe validate the override credentials.

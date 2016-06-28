@@ -1,4 +1,8 @@
 ------------------------------------------------------------
+Version 2.0.3
+    - Fixed an issue with the API override settings.
+
+------------------------------------------------------------
 Version 2.0.2
     - Updated logging statements.
     - Updated to abort authorize()/subscribe() before sending request to PayPal if card number not provided.

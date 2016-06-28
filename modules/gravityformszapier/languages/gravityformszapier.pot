@@ -1,9 +1,9 @@
 # Copyright 2009-2016 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms Zapier Add-on 1.8.3\n"
+"Project-Id-Version: Gravity Forms Zapier Add-on 1.8.4\n"
 "Report-Msgid-Bugs-To: http://www.gravtiyhelp.com\n"
-"POT-Creation-Date: 2016-04-18 14:53:11+00:00\n"
+"POT-Creation-Date: 2016-06-16 09:16:40+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Textdomain-Support: yes\n"
 
-#: plugin-upgrade.php:54 zapier.php:780
+#: plugin-upgrade.php:54 zapier.php:765
 msgid "View version %s Details"
 msgstr ""
 
@@ -56,15 +56,15 @@ msgstr ""
 msgid "Zap could not be updated. Please enter all required information below."
 msgstr ""
 
-#: zapier.php:280 zapier.php:841 zapier.php:1211
+#: zapier.php:280 zapier.php:826 zapier.php:1196
 msgid "Zap Name"
 msgstr ""
 
-#: zapier.php:291 zapier.php:842 zapier.php:1212
+#: zapier.php:291 zapier.php:827 zapier.php:1197
 msgid "Webhook URL"
 msgstr ""
 
-#: zapier.php:302 zapier.php:843
+#: zapier.php:302 zapier.php:828
 msgid "Active"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: zapier.php:316 zapier.php:844
+#: zapier.php:316 zapier.php:829
 msgid "Conditional Logic"
 msgstr ""
 
@@ -130,105 +130,105 @@ msgstr ""
 msgid "Update Zapier Feed"
 msgstr ""
 
-#: zapier.php:434
+#: zapier.php:419
 msgid "Enter value"
 msgstr ""
 
-#: zapier.php:705
+#: zapier.php:690
 msgid "Uninstall Zapier Add-On"
 msgstr ""
 
-#: zapier.php:709
+#: zapier.php:694
 msgid "This operation deletes ALL Zapier feeds."
 msgstr ""
 
-#: zapier.php:709
+#: zapier.php:694
 msgid "If you continue, you will not be able to recover any Zapier data."
 msgstr ""
 
-#: zapier.php:712
+#: zapier.php:697
 msgid ""
 "Warning! ALL settings will be deleted. This cannot be undone. \\'OK\\' to "
 "delete, \\'Cancel\\' to stop"
 msgstr ""
 
-#: zapier.php:780
+#: zapier.php:765
 msgid "There is a new version of Gravity Forms Zapier Add-On available."
 msgstr ""
 
-#: zapier.php:781
+#: zapier.php:766
 msgid ""
 "%sRegister%s your copy of Gravity Forms to receive access to automatic "
 "upgrades and support. Need a license key? %sPurchase one now%s."
 msgstr ""
 
-#: zapier.php:804
+#: zapier.php:789
 msgid "You don't have adequate permission to uninstall the Zapier Add-On."
 msgstr ""
 
-#: zapier.php:841
+#: zapier.php:826
 msgid ""
 "This is a friendly name so you know what Zap is run when this form is "
 "submitted."
 msgstr ""
 
-#: zapier.php:842
+#: zapier.php:827
 msgid ""
 "This is the URL provided by Zapier when you created your Zap on their "
 "website. This is the location to which your form data will be submitted to "
 "Zapier for additional processing."
 msgstr ""
 
-#: zapier.php:843
+#: zapier.php:828
 msgid ""
 "Check this box if you want your form submissions to be sent to Zapier for "
 "processing."
 msgstr ""
 
-#: zapier.php:844
+#: zapier.php:829
 msgid ""
 "When Conditional Logic is enabled, submissions for this form will only be "
 "sent to Zapier when the condition is met. When disabled, all submissions "
 "for this form will be sent to Zapier."
 msgstr ""
 
-#: zapier.php:961 zapier.php:1024
+#: zapier.php:946 zapier.php:1009
 msgid "Send feed to Zapier only when payment is received."
 msgstr ""
 
-#: zapier.php:976
+#: zapier.php:961
 msgid "Post Payment Actions"
 msgstr ""
 
-#: zapier.php:976
+#: zapier.php:961
 msgid "Select which actions should only occur after payment has been received."
 msgstr ""
 
-#: zapier.php:1261
+#: zapier.php:1246
 msgid "You currently don't have any Zapier Feeds, let's go %screate one%s"
 msgstr ""
 
-#: zapier.php:1285
+#: zapier.php:1270
 msgid "Edit this item"
 msgstr ""
 
-#: zapier.php:1285
+#: zapier.php:1270
 msgid "Edit"
 msgstr ""
 
-#: zapier.php:1286
+#: zapier.php:1271
 msgid "Delete this item"
 msgstr ""
 
-#: zapier.php:1286
+#: zapier.php:1271
 msgid "WARNING: You are about to delete this Zapier feed."
 msgstr ""
 
-#: zapier.php:1286
+#: zapier.php:1271
 msgid "\\'Cancel\\' to stop, \\'OK\\' to delete."
 msgstr ""
 
-#: zapier.php:1286
+#: zapier.php:1271
 msgid "Delete"
 msgstr ""
 

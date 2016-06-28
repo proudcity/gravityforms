@@ -1,6 +1,6 @@
 gravityforms 1.9.19.5
 gravityformsmailchimp 3.7.3
-gravityformspaypalpaymentspro 2.0.2
+gravityformspaypalpaymentspro 2.0.3
 gravityformspaypalpro 1.6.3
 gravityformsstripe 2.0.5
-gravityformszapier 1.8.3
+gravityformszapier 1.8.4

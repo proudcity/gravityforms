@@ -4,7 +4,7 @@
 Plugin Name: Gravity Forms Zapier Add-on
 Plugin URI: http://www.gravityforms.com
 Description: Integrates Gravity Forms with Zapier allowing form submissions to be automatically sent to your configured Zaps.
-Version: 1.8.3
+Version: 1.8.4
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityformszapier
@@ -36,7 +36,7 @@ class GFZapier {
 	private static $slug = "gravityformszapier";
 	private static $path = "gravityformszapier/zapier.php";
     private static $url = "http://www.gravityforms.com";
-    private static $version = "1.8.3";
+    private static $version = "1.8.4";
     private static $min_gravityforms_version = "1.9";
 
 	private static $_current_body = null;
@@ -410,22 +410,7 @@ class GFZapier {
                     str += '<?php $dd = wp_dropdown_categories(array("class"=>"optin_select", "orderby"=> "name", "id"=> "gf_zapier_conditional_value", "name"=> "gf_zapier_conditional_value", "hierarchical"=>true, "hide_empty"=>0, "echo"=>false)); echo str_replace("\n","", str_replace("'","\\'",$dd)); ?>';
                 }
                 else if(field.choices){
-                    str += '<select id="gf_zapier_conditional_value" name="gf_zapier_conditional_value" class="optin_select">'
-
-                    for(var i=0; i<field.choices.length; i++){
-                        var fieldValue = field.choices[i].value ? field.choices[i].value : field.choices[i].text;
-                        var isSelected = fieldValue == selectedValue;
-                        var selected = isSelected ? "selected='selected'" : "";
-                        if(isSelected)
-                            isAnySelected = true;
-
-                        str += "<option value='" + fieldValue.replace(/'/g, "&#039;") + "' " + selected + ">" + TruncateMiddle(field.choices[i].text, labelMaxCharacters) + "</option>";
-                    }
-
-                    if(!isAnySelected && selectedValue){
-                        str += "<option value='" + selectedValue.replace(/'/g, "&#039;") + "' selected='selected'>" + TruncateMiddle(selectedValue, labelMaxCharacters) + "</option>";
-                    }
-                    str += "</select>";
+	                str += GetRuleValuesDropDown(field.choices, 'gf_zapier', 0, selectedValue, 'gf_zapier_conditional_value');
                 }
                 else
                 {

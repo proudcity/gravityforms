@@ -1,9 +1,9 @@
 # Copyright 2009-2016 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms PayPal Payments Pro Add-On 2.0.2\n"
+"Project-Id-Version: Gravity Forms PayPal Payments Pro Add-On 2.0.3\n"
 "Report-Msgid-Bugs-To: http://www.gravtiyhelp.com\n"
-"POT-Creation-Date: 2016-05-11 16:23:01+00:00\n"
+"POT-Creation-Date: 2016-06-22 08:05:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -216,59 +216,59 @@ msgstr ""
 msgid "Please enter your credit card information."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1003
+#: class-gf-paypalpaymentspro.php:1031
 msgid ""
 "This credit card has been declined by your bank. Please use another form of "
 "payment."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1007
+#: class-gf-paypalpaymentspro.php:1035
 msgid "The credit card has expired."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1011
+#: class-gf-paypalpaymentspro.php:1039
 msgid "The merchant does not accept this type of credit card."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1016
+#: class-gf-paypalpaymentspro.php:1044
 msgid ""
 "There was an error processing your credit card. Please verify the "
 "information and try again."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1020
+#: class-gf-paypalpaymentspro.php:1048
 msgid ""
 "There was an error processing your request. Your credit card was not "
 "charged. Please try again."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1146
+#: class-gf-paypalpaymentspro.php:1174
 msgid "PayPal Payments Pro Add-On v2.0"
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1148
+#: class-gf-paypalpaymentspro.php:1176
 msgid ""
 "Thank you for updating! The new version of the Gravity Forms PayPal "
 "Payments Pro Add-On makes changes to how you manage your PayPal Payments "
 "Pro integration."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1153
+#: class-gf-paypalpaymentspro.php:1181
 msgid "Manage PayPal Payments Pro Contextually"
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1155
+#: class-gf-paypalpaymentspro.php:1183
 msgid ""
 "PayPal Payments Pro Feeds are now accessed via the PayPal Payments Pro "
 "sub-menu within the Form Settings for the Form with which you would like to "
 "integrate PayPal Payments Pro."
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1166
+#: class-gf-paypalpaymentspro.php:1194
 msgid "I understand this change, dismiss this message!"
 msgstr ""
 
-#: class-gf-paypalpaymentspro.php:1167
+#: class-gf-paypalpaymentspro.php:1195
 msgid "Please wait..."
 msgstr ""
 

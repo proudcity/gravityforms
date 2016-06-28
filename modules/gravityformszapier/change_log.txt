@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.8.4
+    - Fixed an issue with the feed conditional logic value drop down for choice based fields.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.8.3
     - Added GFZapier::process_feed( $feed, $entry, $form ) for processing a single feed.
     - Updated minimum Gravity Forms version to 1.9.
