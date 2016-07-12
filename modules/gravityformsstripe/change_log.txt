@@ -1,4 +1,8 @@
 ---------------------------------------------------
+Version 2.0.6
+    - Fixed an issue where entry ID was not correctly populated in charge metadata
+
+---------------------------------------------------
 Version 2.0.5
     - Fixed an issue with the trial property from the $submission_data not being used when generating the plan id.
 

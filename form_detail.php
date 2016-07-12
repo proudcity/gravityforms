@@ -876,7 +876,7 @@ class GFFormDetail {
 			</div>
 			<div class="clear">
 				<input type="text" id="field_custom_field_name_text" size="35" />
-				<select id="field_custom_field_name_select" onchange="SetFieldProperty('postCustomFieldName', jQuery(this).val());">
+				<select id="field_custom_field_name_select" onchange="SetFieldProperty('postCustomFieldName', jQuery(this).val());" style="max-width:100%;">
 					<option value=""><?php esc_html_e( 'Select an existing custom field', 'gravityforms' ); ?></option>
 					<?php
 					$custom_field_names = RGFormsModel::get_custom_field_names();

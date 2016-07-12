@@ -4,7 +4,7 @@
 Gravity Forms Front End Form Styles
 Version 2.0
 http: //www.gravityforms.com
-updated: June 27, 2016 3:20 PM GMT-5
+updated: July 3, 2016 10:13 AM GMT-5
 
 Gravity Forms is a Rocketgenius project
 copyright 2008-2016 Rocketgenius Inc.
@@ -26,7 +26,7 @@ to no.
 */
 
 
-/* show mobile styles first */
+/* mobile styles first */
 
 .gform_wrapper {
     overflow: inherit;
@@ -354,16 +354,16 @@ body .gform_wrapper ul li.field_description_below div.ginput_container_checkbox 
 
 .gfield.right_label,
 .gfield.left_label {
-    padding-top: 10px
+    padding-top: 10px;
 }
 
 .gform_wrapper li.hidden_label input {
-    margin-top: 12px
+    margin-top: 12px;
 }
 
 .gform_wrapper .field_sublabel_hidden_label .ginput_complex.ginput_container input[type=text],
 .gform_wrapper .field_sublabel_hidden_label .ginput_complex.ginput_container select {
-    margin-bottom: 12px
+    margin-bottom: 12px;
 }
 
 .gform_wrapper label.screen-reader-text, .gform_wrapper label.hidden_sub_label {
@@ -381,11 +381,14 @@ body .gform_wrapper ul li.field_description_below div.ginput_container_checkbox 
 .gform_wrapper input.large,
 .gform_wrapper select.large,
 .gform_wrapper input.large,
-.gform_wrapper select.large { width: 100% }
+.gform_wrapper select.large {
+    width: 100%
+}
+
 .gform_wrapper input.datepicker_with_icon.small,
 .gform_wrapper input.datepicker_with_icon.medium,
 .gform_wrapper input.datepicker_with_icon.large {
-    width: 90%;
+    width: calc(100% - 24px);
 }
 
 .gform_wrapper .gfield_error input.small,
@@ -402,7 +405,7 @@ body .gform_wrapper ul li.field_description_below div.ginput_container_checkbox 
 .gform_wrapper .gfield_error input.datepicker_with_icon.small,
 .gform_wrapper .gfield_error input.datepicker_with_icon.medium,
 .gform_wrapper .gfield_error input.datepicker_with_icon.large {
-    width: 85%;
+    width: calc(100% - 32px);
 }
 
 .gform_wrapper textarea.small {
@@ -735,8 +738,7 @@ div.gf_page_steps+div.validation_error {
 }
 
 .gform_wrapper li.gfield_error input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
-.gform_wrapper li.gfield_error textarea,
-.gform_wrapper li.gfield_error select {
+.gform_wrapper li.gfield_error textarea {
     border: 1px solid #790000;
 }
 
@@ -1118,6 +1120,8 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
 .gform_wrapper .gf_progressbar_percentage.percentbar_0 span {
     color: #959595;
     text-shadow: none;
+    float: none !important;
+    margin-left: 12px;
 }
 
 .gform_wrapper .percentbar_blue {
@@ -1259,6 +1263,7 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
     border-spacing: 0;
     border-collapse: collapse;
 }
+
 /* fix for twentyfifteen theme table layout issue */
 
 .gform_wrapper table.gfield_list {
@@ -1279,7 +1284,8 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
     color: #790000;
 }
 
-.gform_wrapper table.gfield_list thead, .gform_wrapper table.gfield_list tr {
+.gform_wrapper table.gfield_list thead,
+.gform_wrapper table.gfield_list tr {
     padding: 0;
     margin: 0;
 }
@@ -1293,7 +1299,8 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
     padding: 0 0 4px 0;
 }
 
-.gform_wrapper table.gfield_list th + th, .gform_wrapper table.gfield_list td + td {
+.gform_wrapper table.gfield_list th + th,
+.gform_wrapper table.gfield_list td + td {
     padding: 0 0 0 16px;
 }
 
@@ -1313,8 +1320,7 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
     opacity: .6;
 }
 
-.gform_wrapper table.gfield_list tr td.gfield_list_icons,
-.gform_wrapper table.gfield_list tr td:last-child {
+.gform_wrapper table.gfield_list tr td.gfield_list_icons {
     width: 48px !important;
     padding: 0 0 0 4px  !important;
     box-sizing: border-box;
@@ -2288,40 +2294,42 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
     }
 
     .gform_wrapper table.gfield_list tr {
-      margin-bottom: 10px;
-      display: block;
-      background: #fff;
-      position:relative;
-      border: 1px solid #CCC;
-      border-top: 2px solid #CCC;
-      border-bottom: 4px solid #CCC;
+        margin-bottom: 10px;
+        display: block;
+        background: #fff;
+        position:relative;
+        border: 1px solid #CCC;
+        border-top: 2px solid #CCC;
+        border-bottom: 4px solid #CCC;
     }
 
     .gform_wrapper table.gfield_list td {
-      display: block;
-      margin-left: 8px;
-      margin-right: 8px;
+        display: block;
+        margin-left: 8px;
+        margin-right: 8px;
     }
 
-    .gform_wrapper table.gfield_list td:last-child {
-      border-bottom: 0;
-      margin: 16px 0 0 0 !important;
+    .gform_wrapper table.gfield_list td.gfield_list_icons {
+        border-bottom: 0;
+        margin: 16px 0 0 0 !important;
+    }
+
+    .gform_wrapper ul.gform_fields.form_sublabel_above table.gfield_list td:before,
+    .gform_wrapper ul.gform_fields.form_sublabel_below table.gfield_list td:after {
+        content: attr(data-label);
+        font-size: 14px;
+        letter-spacing: 0.5pt;
+        white-space: nowrap;
+        display: block;
+        clear: both;
     }
 
     .gform_wrapper ul.gform_fields.form_sublabel_above table.gfield_list td:before {
-      content: attr(data-label);
-      font-size: 14px;
-      letter-spacing: 0.5pt;
-      white-space: nowrap;
-      margin: 8px 0 3px 3px;
-      display: block;
-      clear: both;
+        margin: 8px 0 3px 8px;
     }
 
     .gform_wrapper ul.gform_fields.form_sublabel_below table.gfield_list td:after {
-      content: attr(data-label);
-      line-height: 1.6;
-      display: block !important;
+      margin: 3px 0 8px 8px;
     }
 
     .gform_wrapper table.gfield_list th + th,
@@ -2335,11 +2343,14 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
     }
 
     .gform_wrapper table.gfield_list tr.gfield_list_row_odd:first-child {
-         padding-top: 0;
+         padding-top: 12px;
     }
 
-    .gform_wrapper table.gfield_list tr td.gfield_list_icons,
-    .gform_wrapper table.gfield_list tr td:last-child {
+    .gform_wrapper table.gfield_list tr {
+         padding-top: 12px;
+    }
+
+    .gform_wrapper table.gfield_list tr td.gfield_list_icons {
         width: 100% !important;
         padding: 0 4px 4px 4px !important;
         background-color: #EEE;
@@ -2501,9 +2512,17 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
         width: 49.5%;
     }
 
-    .gform_wrapper .top_label input.large, .gform_wrapper .top_label select.large,
-    .gform_wrapper .hidden_label input.large, .gform_wrapper .hidden_label select.large {
+    .gform_wrapper .top_label input.large,
+    .gform_wrapper .top_label select.large,
+    .gform_wrapper .hidden_label input.large,
+    .gform_wrapper .hidden_label select.large {
         width: 100%;
+    }
+
+    .gform_wrapper .top_label input.small.datepicker,
+    .gform_wrapper .top_label input.medium.datepicker,
+    .gform_wrapper .top_label input.large.datepicker {
+        width: auto;
     }
 
     .gform_wrapper textarea.small {
@@ -2658,19 +2677,21 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
         width: calc(100% + 14px);
     }
 
-    ul:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_1,
-    ul:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_2,
-    ul:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_3 {
+    /* a little better specificty to avoid problems with forms in widgets */
+
+    ul.gform_fields:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_1,
+    ul.gform_fields:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_2,
+    ul.gform_fields:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_3 {
         width: calc(70% + 15px);
         margin-left: 29%;
     }
 
-    ul:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_4 {
+    ul.gform_fields:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_4 {
         width: calc(70% + 13px);
         margin-left: 29%;
     }
 
-    ul:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_5 {
+    ul.gform_fields:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_5 {
         width: calc(70% + 14px);
         margin-left: 29%;
     }
@@ -2786,7 +2807,5 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
     .gform_wrapper ul:not(.top_label) .ginput_container.ginput_recaptcha {
         margin-left: 29% !important;
     }
-
-
 
 }

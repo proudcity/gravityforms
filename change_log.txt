@@ -1,4 +1,42 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.10
+	- Added form switcher to entry detail view.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.9
+	- Fixed issues with sales graph
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.8
+    - Fixed issues with {pricing_fields} markup.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.7
+	- Added the "download" modifier to the fileupload field merge tag to force the file to be downloaded instead of opened in the browser.
+	- Added the gform_secure_file_download_location filter to allow the file security to be bypassed. Not recommended - use with caution.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.6
+	- Added form title edit popup so that form title can be edited from any form page.
+	- Updated create form popup so that the form can be created by pressing the "enter" key while on the title input.
+	- Fixed an issue with the upgrade process from 1.9 to 2.0 for some installations with the HyperDB plugin configured.
+	- AF: Updated pre-defined field mapping population logic to use the field whose label is a direct match.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.5
+	- Fixed issue where long custom meta keys caused Custom Field Name select to break out of field settings container
+	- Fix an issue with the upgrade process from 1.9 to 2.0.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.4
+	- Fixed an issue with the download of files uploaded by the file upload field. Files now open in the browser by default. Add the dl=1 URL param to force the download.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.2.3
+	- Added new form switcher.
+	- Fixed an issue with the gform_is_value_match filter parameters which could occur when evaluating rules based on entry meta.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.0.2.2
     - Fixed issue where gf_is_match() was selecting incorrect inputs for matching
 

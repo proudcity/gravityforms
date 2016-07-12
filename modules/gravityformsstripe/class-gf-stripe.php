@@ -1092,6 +1092,7 @@ class GFStripe extends GFPaymentAddOn {
 		try {
 
 			$charge->description = $this->get_payment_description( $entry, $submission_data, $feed );
+			$charge->metadata = $this->get_stripe_meta_data( $feed, $entry, $form );
 			$charge->save();
 			$charge = $charge->capture();
 
