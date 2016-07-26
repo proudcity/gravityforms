@@ -64,7 +64,7 @@ class GF_Field_FileUpload extends GF_Field {
 			/**
 			 * A filter to allow or disallow whitelisting when uploading a file
 			 *
-			 * @param bool To set upload whitelisting to true or false (default is false, which means it is enabled)
+			 * @param bool false To set upload whitelisting to true or false (default is false, which means it is enabled)
 			 */
 			$whitelisting_disabled = apply_filters( 'gform_file_upload_whitelisting_disabled', false );
 
@@ -542,9 +542,9 @@ class GF_Field_FileUpload extends GF_Field {
 		 *
 		 * Return FALSE to display the real location.
 		 *
-		 * @param bool $secure_download_location
-		 * @param string $file the URL of the file.
-		 * @param GF_Field_FileUpload $this The Field
+		 * @param bool                $secure_download_location If the secure location should be used.  Defaults to true.
+		 * @param string              $file                     The URL of the file.
+		 * @param GF_Field_FileUpload $this                     The Field
 		 */
 		$secure_download_location = apply_filters( 'gform_secure_file_download_location', $secure_download_location, $file, $this );
 		$secure_download_location = apply_filters( 'gform_secure_file_download_location_' . $this->formId, $secure_download_location, $file, $this );

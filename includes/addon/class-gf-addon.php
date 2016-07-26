@@ -3759,6 +3759,11 @@ abstract class GFAddOn {
 		}
 
 		$this->app_tab_page_header( $tabs, $current_tab, $current_tab, '' );
+		/**
+		 * Fires when an addon page and tab is accessed.
+		 *
+		 * Typically used to render settings tab content.
+		 */
 		$action_hook = 'gform_addon_app_' . $page . '_' . str_replace( ' ', '_', $current_tab );
 		do_action( $action_hook );
 		$this->app_tab_page_footer();
@@ -3991,10 +3996,17 @@ abstract class GFAddOn {
 	 */
 	public function get_app_settings_tabs() {
 
-		//build left side options, always have app Settings first and Uninstall last, put add-ons in the middle
+		// Build left side options, always have app Settings first and Uninstall last, put add-ons in the middle
 
 		$setting_tabs = array( array( 'name' => 'settings', 'label' => esc_html__( 'Settings', 'gravityforms' ), 'callback' => array( $this, 'app_settings_tab' ) ) );
 
+		/**
+		 * Filters the tabs within the settings menu.
+		 *
+		 * This filter is appended by the page slug.  Ex: gform_addon_app_settings_menu_SLUG
+		 *
+		 * @param array $setting_tabs Contains the information on the settings tabs.
+		 */
 		$setting_tabs = apply_filters( 'gform_addon_app_settings_menu_' . $this->_slug, $setting_tabs );
 
 		if ( $this->current_user_can_any( $this->_capabilities_uninstall ) ) {

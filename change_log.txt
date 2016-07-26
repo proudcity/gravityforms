@@ -1,49 +1,54 @@
 ------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.10
+Version 2.0.3.6
+    - Fixed fatal error which could occur on the entry list page.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.3.5
+    - Fixed a fatal error which could occur in some situations when cleaning currency formatted values.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.3.4
+	- Fixed an issue with entry export for some installations that use alternative stream wrappers for writing to the uploads folder e.g. S3.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.3.3
+	- Fixed issue with conditional logic on different number formats.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.3.2
+    - Added the gform_default_address_type filter for overriding the default address type for new fields.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.3.1
+    - Fixed an issue with the Address field in the form editor.
+    - Fixed {all_fields} merge tag converting field label characters to HTML entities when using the text format.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.3
+	- Added support for [embed] shortcode for HTML fields.
 	- Added form switcher to entry detail view.
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.9
-	- Fixed issues with sales graph
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.8
-    - Fixed issues with {pricing_fields} markup.
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.7
 	- Added the "download" modifier to the fileupload field merge tag to force the file to be downloaded instead of opened in the browser.
 	- Added the gform_secure_file_download_location filter to allow the file security to be bypassed. Not recommended - use with caution.
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.6
 	- Added form title edit popup so that form title can be edited from any form page.
-	- Updated create form popup so that the form can be created by pressing the "enter" key while on the title input.
-	- Fixed an issue with the upgrade process from 1.9 to 2.0 for some installations with the HyperDB plugin configured.
-	- AF: Updated pre-defined field mapping population logic to use the field whose label is a direct match.
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.5
-	- Fixed issue where long custom meta keys caused Custom Field Name select to break out of field settings container
-	- Fix an issue with the upgrade process from 1.9 to 2.0.
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.4
-	- Fixed an issue with the download of files uploaded by the file upload field. Files now open in the browser by default. Add the dl=1 URL param to force the download.
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.3
 	- Added new form switcher.
-	- Fixed an issue with the gform_is_value_match filter parameters which could occur when evaluating rules based on entry meta.
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.2
-    - Fixed issue where gf_is_match() was selecting incorrect inputs for matching
-
-------------------------------------------------------------------------------------------------------------------
-Version 2.0.2.1
+	- Updated create form popup so that the form can be created by pressing the "enter" key while on the title input.
     - Updated the error messages for upgrade issues.
-    - Restored the gform_entries_column_filter and gform_entries_column hooks.
+    - Fixed issues the gform_entries_column_filter and gform_entries_column hooks.
+	- Fixed issue with entry export.
+	- Fixed issue with gform_entries_first_column hook.
+	- Fixed an issue with the validation of the notification reply-to and bcc fields.
+	- Fixed issue with conditional logic when using translations that change number formatting.
+	- Fixed issue causing form to be submitted on any key press when button had focus.
+	- Fixed issue saving background updates setting in installation wizard.
+	- Fixed issues with sales graph.
+    - Fixed issues with {pricing_fields} markup.
+	- Fixed an issue with the upgrade process from 1.9 to 2.0 for some installations with the HyperDB plugin configured.
+	- Fixed issue where long custom meta keys caused Custom Field Name select to break out of field settings container.
+	- Fixed an issue with the upgrade process from 1.9 to 2.0.
+	- Fixed an issue with the download of files uploaded by the file upload field. Files now open in the browser by default. Add the dl=1 URL param to force the download.
+	- Fixed an issue with the gform_is_value_match filter parameters which could occur when evaluating rules based on entry meta.
+    - Fixed issue where gf_is_match() was selecting incorrect inputs for matching.
+	- AF: Implemented pre-defined field mapping to automatically select matching fields when creating feeds.
 
 ------------------------------------------------------------------------------------------------------------------
 Version 2.0.2

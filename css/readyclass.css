@@ -4,7 +4,7 @@
 readyclass.css
 Gravity Forms Ready Class Pre-Set Helper Styles
 http://www.gravityforms.com
-updated: July 3, 2016 10:13 AM GMT-5
+updated: July 12, 2016 10:11 PM GMT-5
 
 Gravity Forms is a Rocketgenius project
 copyright 2008-2016 Rocketgenius Inc.
@@ -63,8 +63,7 @@ to no.
     }
 
     .gform_wrapper .top_label li.gfield.gf_inline select {
-        width: auto;
-        min-width: 98%;
+        width: 100%;
     }
 
     .gform_wrapper .top_label li.gfield.gf_inline textarea {
@@ -90,6 +89,10 @@ to no.
 
     .gform_wrapper li.gf_inline div.ginput_container {
         white-space: nowrap !important;
+    }
+
+    .gform_wrapper li.gf_inline div.ginput_container.ginput_container_date label {
+        display: block !important;
     }
 
     .gform_wrapper .top_label li.gfield.gf_left_half,
@@ -352,8 +355,8 @@ to no.
         width: calc(100% + 16px);
     }
 
-    .gform_wrapper ul:not(.top_label) li ul.gfield_checkbox,
-    .gform_wrapper ul:not(.top_label)li ul.gfield_radio {
+    .gform_wrapper ul.gform_fields:not(.top_label) li ul.gfield_checkbox,
+    .gform_wrapper ul.gform_fields:not(.top_label)li ul.gfield_radio {
         width: calc(70% + 16px);
     }
 
@@ -429,11 +432,11 @@ to no.
         overflow: hidden;
     }
 
-    .gform_wrapper ul:not(.top_label) li.gfield.gf_list_2col label.gfield_label,
-    .gform_wrapper ul:not(.top_label) li.gfield.gf_list_3col label.gfield_label,
-    .gform_wrapper ul:not(.top_label) li.gfield.gf_list_4col label.gfield_label,
-    .gform_wrapper ul:not(.top_label) li.gfield.gf_list_5col label.gfield_label,
-    .gform_wrapper ul:not(.top_label) li.gfield.gf_list_inline label.gfield_label {
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gfield.gf_list_2col label.gfield_label,
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gfield.gf_list_3col label.gfield_label,
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gfield.gf_list_4col label.gfield_label,
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gfield.gf_list_5col label.gfield_label,
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gfield.gf_list_inline label.gfield_label {
         margin: 0 0 10px 0;
     }
 
@@ -448,10 +451,10 @@ to no.
         column-gap: 16px;
     }
 
-    .gform_wrapper ul:not(.top_label) li.gf_list_2col_vertical label.gfield_label,
-    .gform_wrapper ul:not(.top_label) li.gf_list_2col_vertical label.gfield_label,
-    .gform_wrapper ul:not(.top_label) li.gf_list_2col_vertical label.gfield_label,
-    .gform_wrapper ul:not(.top_label) li.gf_list_2col_vertical label.gfield_label {
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gf_list_2col_vertical label.gfield_label,
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gf_list_2col_vertical label.gfield_label,
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gf_list_2col_vertical label.gfield_label,
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gf_list_2col_vertical label.gfield_label {
         margin: 0 0 10px 0;
     }
 

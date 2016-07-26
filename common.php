@@ -168,16 +168,16 @@ class GFCommon {
 		closedir( $dp );
 	}
 
-    public static function add_htaccess_file(){
+    public static function add_htaccess_file() {
 
         $upload_root = GFFormsModel::get_upload_root();
 
         if ( ! is_dir( $upload_root ) ) {
             return;
         }
-	    $htaccess_file = $upload_root . '/.htaccess';
+	    $htaccess_file = $upload_root . '.htaccess';
 	    if ( file_exists( $htaccess_file ) ) {
-			unlink($htaccess_file);
+		    @unlink( $htaccess_file );
 	    }
 	    $txt= '# Disable parsing of PHP for some server configurations. This file may be removed or modified on certain server configurations by using by the gform_upload_root_htaccess_rules filter. Please consult your system administrator before removing this file.
 <Files *>
@@ -193,6 +193,8 @@ class GFCommon {
 
 	    /**
 	     * A filter to allow the modification/disabling of parsing certain PHP within Gravity Forms
+	     *
+	     * @since 1.9.2
 	     *
 	     * @param mixed $rules The Rules of what to parse or not to parse
 	     */
@@ -215,8 +217,12 @@ class GFCommon {
 			$decimal_char = '.';
 		} else if ( $number_format == 'decimal_comma' ) {
 			$decimal_char = ',';
-		} else if ($number_format == 'currency' ){
-			$currency = RGCurrency::get_currency( GFCommon::get_currency() );
+		} else if ( $number_format == 'currency' ) {
+			if ( ! class_exists( 'RGCurrency' ) ) {
+				require_once( self::get_base_path() . '/currency.php' );
+			}
+
+			$currency     = RGCurrency::get_currency( GFCommon::get_currency() );
 			$decimal_char = $currency['decimal_separator'];
 		}
 
@@ -1159,7 +1165,7 @@ class GFCommon {
 
 			$field_value = '';
 
-			$field_label = $use_admin_label && ! empty( $field->adminLabel ) ? $field->adminLabel : esc_html( GFCommon::get_label( $field, 0, false, $use_admin_label ) );
+			$field_label = $use_admin_label && ! empty( $field->adminLabel ) ? $field->adminLabel : ( $format == 'text' ? sanitize_text_field( GFCommon::get_label( $field, 0, false, $use_admin_label ) ) : esc_html( GFCommon::get_label( $field, 0, false, $use_admin_label ) ) );
 
 			switch ( $field->type ) {
 				case 'captcha' :
