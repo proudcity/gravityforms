@@ -77,7 +77,7 @@ class GFStripe extends GFPaymentAddOn {
 						'deps'      => array( 'jquery', 'stripe.js', 'gform_json' ),
 						'in_footer' => false,
 						'enqueue'   => array(
-								array( $this, 'has_feed_callback' ),
+								array( $this, 'frontend_script_callback' ),
 						)
 				),
 				array(
@@ -709,6 +709,7 @@ class GFStripe extends GFPaymentAddOn {
 		add_filter( 'gform_register_init_scripts', array( $this, 'register_init_scripts' ), 10, 3 );
 		add_filter( 'gform_field_content', array( $this, 'add_stripe_inputs' ), 10, 5 );
 		add_filter( 'gform_field_validation', array( $this, 'pre_validation' ), 10, 4 );
+		add_filter( 'gform_pre_submission', array( $this, 'populate_credit_card_last_four' ) );
 
 		parent::init();
 
@@ -721,6 +722,10 @@ class GFStripe extends GFPaymentAddOn {
 		}
 
 		$cc_field = $this->get_credit_card_field( $form );
+
+		if ( ! $cc_field ) {
+			return;
+		}
 
 		$args = array(
 			'apiKey'     => $this->get_publishable_api_key(),
@@ -775,8 +780,6 @@ class GFStripe extends GFPaymentAddOn {
 	 */
 	public function pre_validation( $result, $value, $form, $field ) {
 		if ( $field->type == 'creditcard' && rgpost( 'stripe_credit_card_last_four' ) ) {
-			$this->populate_credit_card_last_four( $form );
-
 			$card_type = rgpost( 'stripe_credit_card_type' );
 			$card_slug = $this->get_card_slug( $card_type );
 
@@ -895,8 +898,9 @@ class GFStripe extends GFPaymentAddOn {
 				if ( ! empty( $field_value ) ) {
 					//trim to 500 characters per Stripe requirement
 					$field_value = substr( $field_value, 0, 500 );
+					$metadata[ $meta['custom_key'] ] = $field_value;
 				}
-				$metadata[ $meta['custom_key'] ] = $field_value;
+
 			}
 		}
 
@@ -1013,6 +1017,10 @@ class GFStripe extends GFPaymentAddOn {
 	 * @param $form
 	 */
 	public function populate_credit_card_last_four( $form ) {
+		if ( ! $this->is_payment_gateway ) {
+			return;
+		}
+
 		$cc_field                                 = $this->get_credit_card_field( $form );
 		$_POST[ 'input_' . $cc_field->id . '_1' ] = 'XXXXXXXXXXXX' . rgpost( 'stripe_credit_card_last_four' );
 		$_POST[ 'input_' . $cc_field->id . '_4' ] = rgpost( 'stripe_credit_card_type' );
@@ -1129,6 +1137,15 @@ class GFStripe extends GFPaymentAddOn {
 	public function process_subscription( $authorization, $feed, $submission_data, $form, $entry ) {
 
 		gform_update_meta( $entry['id'], 'stripe_customer_id', $authorization['subscription']['customer_id'] );
+
+		// update to user meta post entry creation so entry ID is available
+		try {
+			$customer = Stripe_Customer::retrieve( $authorization['subscription']['customer_id'] );
+			$customer->metadata = $this->get_stripe_meta_data( $feed, $entry, $form );
+			$customer->save();
+		} catch ( Stripe_Error $e ) {
+			$this->log_debug( __METHOD__ . "(): Stripe_Customer: " . $e->getMessage() );
+		}
 
 		return parent::process_subscription( $authorization, $feed, $submission_data, $form, $entry );
 	}
@@ -1411,14 +1428,14 @@ class GFStripe extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Check if the form has an active Stripe feed.
+	 * Check if the form has an active Stripe feed and a credit card field.
 	 *
 	 * @param array $form The form currently being processed.
 	 *
 	 * @return bool
 	 */
-	public function has_feed_callback( $form ) {
-		return $form && $this->has_feed( $form['id'] );
+	public function frontend_script_callback( $form ) {
+		return $form && $this->has_feed( $form['id'] ) && $this->has_credit_card_field( $form );
 	}
 
 	/**

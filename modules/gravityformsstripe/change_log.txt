@@ -1,4 +1,24 @@
 ---------------------------------------------------
+Version 2.0.11
+    - Updated to only repopulate the card field with the last four digits on successful form submission.
+
+---------------------------------------------------
+Version 2.0.10
+    - Fixed a JavaScript error which occurred when the frontend scripts were included when the form had an active feed but no credit card field.
+
+---------------------------------------------------
+Version 2.0.9
+	- Fixed issue which could occur when saving an incomplete submission.
+
+	---------------------------------------------------
+Version 2.0.8
+	- Fixed issue when sending empty meta data.
+
+---------------------------------------------------
+Version 2.0.7
+    - Fixed an issue where entry ID was not correctly populated in customer metadata (for subscription feeds)
+
+---------------------------------------------------
 Version 2.0.6
     - Fixed an issue where entry ID was not correctly populated in charge metadata
 
