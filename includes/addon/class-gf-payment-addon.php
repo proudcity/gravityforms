@@ -2776,13 +2776,17 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		check_ajax_referer( 'gaddon_cancel_subscription', 'gaddon_cancel_subscription' );
 
 		$entry_id = $_POST['entry_id'];
-		$entry    = GFAPI::get_entry( $entry_id );
 
-		$form = GFAPI::get_form( $entry['form_id'] );
-		$feed = $this->get_payment_feed( $entry, $form );
+		$this->log_debug( __METHOD__ . '(): Processing request for entry #' . $entry_id );
+
+		$entry = GFAPI::get_entry( $entry_id );
+		$form  = GFAPI::get_form( $entry['form_id'] );
+		$feed  = $this->get_payment_feed( $entry, $form );
 
 		//This addon does not have a payment feed. Abort.
-		if ( empty ( $feed ) ){
+		if ( empty ( $feed ) ) {
+			$this->log_debug( __METHOD__ . '(): Aborting. Entry does not have a feed.' );
+
 			return;
 		}
 
@@ -2790,6 +2794,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			$this->cancel_subscription( $entry, $feed );
 			die( '1' );
 		} else {
+			$this->log_debug( __METHOD__ . '(): Aborting. Unable to cancel subscription.' );
 			die( '0' );
 		}
 

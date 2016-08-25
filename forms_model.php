@@ -4088,7 +4088,7 @@ class GFFormsModel {
 		$lead_detail_table_name = self::get_lead_details_table_name();
 		$lead_table_name        = self::get_lead_table_name();
 
-		$sort_direction = strtolower( $sort_direction ) == 'desc' ? 'DESC' : 'ASC' ;
+		$sort_direction = in_array( strtolower( $sort_direction ), array( 'desc', 'asc', 'rand' ) ) ? strtoupper( $sort_direction ) : 'ASC';
 
 		$orderby    = $is_numeric_sort ? "ORDER BY query, (value+0) $sort_direction" : "ORDER BY query, value $sort_direction";
 		$is_default = false;
@@ -4804,7 +4804,7 @@ class GFFormsModel {
 		$lead_detail_table_name = GFFormsModel::get_lead_details_table_name();
 		$lead_table_name        = GFFormsModel::get_lead_table_name();
 
-		$sort_direction = strtolower( $sort_direction ) == 'desc' ? 'DESC' : 'ASC' ;
+		$sort_direction = in_array( strtolower( $sort_direction ), array( 'desc', 'asc', 'rand' ) ) ? strtoupper( $sort_direction ) : 'ASC';
 
 		$orderby = $is_numeric_sort ? "ORDER BY query, (value+0) $sort_direction" : "ORDER BY query, value $sort_direction";
 
@@ -5689,11 +5689,11 @@ class GFFormsModel {
 		// form scheduling settings
 		if ( isset( $form['scheduleForm'] ) ) {
 			$form['scheduleForm']           = (bool) $form['scheduleForm'];
-			$form['scheduleStart']          = $form['scheduleForm'] ? preg_replace( '([^0-9/])', '', $form['scheduleStart'] ) : '';
+			$form['scheduleStart']          = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleStart'] ) : '';
 			$form['scheduleStartHour']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartHour'], 1, 12 ) : '';
 			$form['scheduleStartMinute']    = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartMinute'], 1, 60 ) : '';
 			$form['scheduleStartAmpm']      = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleStartAmpm'], array( 'am', 'pm' ) ) : '';
-			$form['scheduleEnd']            = $form['scheduleForm'] ? preg_replace( '([^0-9/])', '', $form['scheduleEnd'] ) : '';
+			$form['scheduleEnd']            = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleEnd'] ) : '';
 			$form['scheduleEndHour']        = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndHour'], 1, 12 ) : '';
 			$form['scheduleEndMinute']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndMinute'], 1, 60 ) : '';
 			$form['scheduleEndAmpm']        = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleEndAmpm'], array( 'am', 'pm' ) ) : '';

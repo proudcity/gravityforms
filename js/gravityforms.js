@@ -1252,6 +1252,8 @@ function renderRecaptcha() {
 
         grecaptcha.render( this.id, parameters );
 
+        gform.doAction( 'gform_post_recaptcha_render', $elem );
+
     } );
 
 }

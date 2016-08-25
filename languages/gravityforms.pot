@@ -1,9 +1,9 @@
 # Copyright 2009-2016 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms 2.0.6.4\n"
+"Project-Id-Version: Gravity Forms 2.0.6.8\n"
 "Report-Msgid-Bugs-To: http://www.gravtiyhelp.com\n"
-"POT-Creation-Date: 2016-08-16 17:06:00+00:00\n"
+"POT-Creation-Date: 2016-08-24 13:11:37+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -59,7 +59,7 @@ msgstr ""
 msgid "Embed URL"
 msgstr ""
 
-#: common.php:510 entry_detail.php:1210 entry_list.php:746 export.php:859
+#: common.php:510 entry_detail.php:1210 entry_list.php:746 export.php:861
 #: forms_model.php:4443 select_columns.php:176
 msgid "Entry Id"
 msgstr ""
@@ -85,7 +85,7 @@ msgstr ""
 msgid "HTTP Referer URL"
 msgstr ""
 
-#: common.php:518 export.php:867
+#: common.php:518 export.php:869
 msgid "Post Id"
 msgstr ""
 
@@ -505,7 +505,7 @@ msgstr ""
 msgid "Entry ID"
 msgstr ""
 
-#: common.php:4228 export.php:860 forms_model.php:4449
+#: common.php:4228 export.php:862 forms_model.php:4449
 #: includes/addon/class-gf-addon.php:1946 select_columns.php:177
 msgid "Entry Date"
 msgstr ""
@@ -522,15 +522,15 @@ msgstr ""
 msgid "Source URL"
 msgstr ""
 
-#: common.php:4256 export.php:865 forms_model.php:4455 select_columns.php:180
+#: common.php:4256 export.php:867 forms_model.php:4455 select_columns.php:180
 msgid "Payment Status"
 msgstr ""
 
-#: common.php:4294 export.php:864 forms_model.php:4461 select_columns.php:183
+#: common.php:4294 export.php:866 forms_model.php:4461 select_columns.php:183
 msgid "Payment Date"
 msgstr ""
 
-#: common.php:4300 export.php:863 forms_model.php:4464
+#: common.php:4300 export.php:865 forms_model.php:4464
 #: includes/addon/class-gf-payment-addon.php:1610
 #: includes/addon/class-gf-payment-addon.php:1615 select_columns.php:182
 msgid "Payment Amount"
@@ -812,7 +812,7 @@ msgstr ""
 msgid "Subscription Id"
 msgstr ""
 
-#: entry_detail.php:1135 export.php:862 forms_model.php:4458
+#: entry_detail.php:1135 export.php:864 forms_model.php:4458
 #: select_columns.php:181
 msgid "Transaction Id"
 msgstr ""
@@ -830,7 +830,7 @@ msgstr ""
 msgid "Submitted on"
 msgstr ""
 
-#: entry_detail.php:1213 export.php:869 forms_model.php:4446
+#: entry_detail.php:1213 export.php:871 forms_model.php:4446
 #: includes/addon/class-gf-addon.php:1947 select_columns.php:178
 msgid "User IP"
 msgstr ""
@@ -1225,7 +1225,7 @@ msgstr ""
 msgid "Edit Form"
 msgstr ""
 
-#: export.php:298 export.php:968
+#: export.php:298 export.php:970
 msgid "Import Forms"
 msgstr ""
 
@@ -1243,7 +1243,7 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: export.php:336 export.php:965
+#: export.php:336 export.php:967
 msgid "Export Forms"
 msgstr ""
 
@@ -1263,7 +1263,7 @@ msgstr ""
 msgid "Download Export File"
 msgstr ""
 
-#: export.php:383 export.php:961
+#: export.php:383 export.php:963
 msgid "Export Entries"
 msgstr ""
 
@@ -1333,16 +1333,16 @@ msgstr ""
 msgid "Exporting entries. Progress:"
 msgstr ""
 
-#: export.php:858
+#: export.php:860
 msgid "Created By (User Id)"
 msgstr ""
 
-#: export.php:861 forms_model.php:4452 includes/addon/class-gf-addon.php:1948
+#: export.php:863 forms_model.php:4452 includes/addon/class-gf-addon.php:1948
 #: select_columns.php:179
 msgid "Source Url"
 msgstr ""
 
-#: export.php:868
+#: export.php:870
 msgid "User Agent"
 msgstr ""
 
@@ -5094,37 +5094,37 @@ msgstr ""
 msgid "Cancel Subscription"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2863
+#: includes/addon/class-gf-payment-addon.php:2868
 msgid "sale"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2864
+#: includes/addon/class-gf-payment-addon.php:2869
 msgid "sales"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2878
+#: includes/addon/class-gf-payment-addon.php:2883
 msgid "There hasn't been any sales in the specified date range."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2901
+#: includes/addon/class-gf-payment-addon.php:2906
 msgid "1 item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/addon/class-gf-payment-addon.php:2918
+#: includes/addon/class-gf-payment-addon.php:2923
 msgid "Go to the first page"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2925
+#: includes/addon/class-gf-payment-addon.php:2930
 msgid "Go to the previous page"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2940
+#: includes/addon/class-gf-payment-addon.php:2945
 msgid "Go to the next page"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2949
+#: includes/addon/class-gf-payment-addon.php:2954
 msgid "Go to the last page"
 msgstr ""
 
@@ -9563,7 +9563,8 @@ msgstr ""
 #: tooltips.php:95
 msgid ""
 "Select a form field size from the available options. This will set the "
-"width of the field."
+"width of the field. Please note: if using a paragraph field, the size "
+"applies only to the height of the field."
 msgstr ""
 
 #: tooltips.php:96
@@ -10218,7 +10219,7 @@ msgctxt "metabox title"
 msgid "Filter"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2935
+#: includes/addon/class-gf-payment-addon.php:2940
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr ""

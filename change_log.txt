@@ -1,4 +1,21 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.0.6.8
+    - Added the gform_post_recaptcha_render action hook. See https://www.gravityhelp.com/documentation/article/gform_post_recaptcha_render/
+    - Fixed an issue with the start_date and end_date filters used with the entry export.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.6.7
+    - Fixed an issue with the form schedule sanitization.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.6.6
+    - Updated entry search to allow for random sorting.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.6.5
+    - AF: Added subscription cancellation logging.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.0.6.4
     - Updated GFCommon::decrypt() to accept the same arguments as GFCommon::encrypt().
     - Fixed an issue with the field filters for choice based pricing fields.

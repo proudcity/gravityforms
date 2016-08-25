@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: http://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.0.6.4
+Version: 2.0.6.8
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityforms
@@ -96,7 +96,7 @@ define( 'GF_SUPPORTED_WP_VERSION', version_compare( get_bloginfo( 'version' ), G
  * Defines the minimum version of WordPress that will be officially supported
  * @var string GF_MIN_WP_VERSION_SUPPORT_TERMS The version number
  */
-define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '4.4' );
+define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '4.5' );
 
 if ( ! defined( 'GRAVITY_MANAGER_URL' ) ) {
 	define( 'GRAVITY_MANAGER_URL', 'https://www.gravityhelp.com/wp-content/plugins/gravitymanager' );
@@ -156,7 +156,7 @@ class GFForms {
 	 * @static
 	 * @var string $version The version number
 	 */
-	public static $version = '2.0.6.4';
+	public static $version = '2.0.6.8';
 
 	/**
 	 * Runs after Gravity Forms is loaded.
