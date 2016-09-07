@@ -3183,6 +3183,13 @@ class GFFormsModel {
 		$post_id = wp_insert_post( $post_data );
 		GFCommon::log_debug( "GFFormsModel::create_post(): Result from wp_insert_post(): {$post_id}." );
 
+		if ( is_wp_error( $post_id ) ) {
+			return false;
+		}
+
+		// Add the post id to the entry so it is available during merge tag replacement.
+		$lead['post_id'] = $post_id;
+
 		//adding form id and entry id hidden custom fields
 		add_post_meta( $post_id, '_gform-form-id', $form['id'] );
 		add_post_meta( $post_id, '_gform-entry-id', $lead['id'] );
@@ -3190,9 +3197,14 @@ class GFFormsModel {
 		$post_images = array();
 		if ( ! empty( $post_data['images'] ) ) {
 			// Creating post images.
-			GFCommon::log_debug( 'GFFormsModel::create_post(): Creating post images.' );
+			GFCommon::log_debug( 'GFFormsModel::create_post(): Processing post images.' );
 
 			foreach ( $post_data['images'] as $image ) {
+				if ( empty( $image['url'] ) ) {
+					GFCommon::log_debug( __METHOD__ . '(): No image to process for field #' . $image['field_id'] );
+					continue;
+				}
+
 				$image_meta = array(
 					'post_excerpt' => $image['caption'],
 					'post_content' => $image['description'],
@@ -3203,22 +3215,20 @@ class GFFormsModel {
 					$image_meta['post_title'] = $image['title'];
 				}
 
-				if ( ! empty( $image['url'] ) ) {
-					GFCommon::log_debug( 'GFFormsModel::create_post(): Adding image: ' . $image['url'] );
-					$media_id = self::media_handle_upload( $image['url'], $post_id, $image_meta );
+				GFCommon::log_debug( sprintf( '%s(): Field #%s. URL: %s', __METHOD__, $image['field_id'], $image['url'] ) );
+				$media_id = self::media_handle_upload( $image['url'], $post_id, $image_meta );
 
-					if ( $media_id ) {
+				if ( $media_id ) {
 
-						// Save media id for post body/title template variable replacement (below).
-						$post_images[ $image['field_id'] ] = $media_id;
-						$lead[ $image['field_id'] ] .= "|:|$media_id";
+					// Save media id for post body/title template variable replacement (below).
+					$post_images[ $image['field_id'] ] = $media_id;
+					$lead[ $image['field_id'] ] .= "|:|$media_id";
 
-						// Setting the featured image.
-						$field = RGFormsModel::get_field( $form, $image['field_id'] );
-						if ( $field->postFeaturedImage ) {
-							$result = set_post_thumbnail( $post_id, $media_id );
-							GFCommon::log_debug( __METHOD__ . '(): Setting the featured image. Result from set_post_thumbnail(): ' . var_export( $result, 1 ) );
-						}
+					// Setting the featured image.
+					$field = RGFormsModel::get_field( $form, $image['field_id'] );
+					if ( $field->postFeaturedImage ) {
+						$result = set_post_thumbnail( $post_id, $media_id );
+						GFCommon::log_debug( __METHOD__ . '(): Setting the featured image. Result from set_post_thumbnail(): ' . var_export( $result, 1 ) );
 					}
 				}
 			}
@@ -3341,8 +3351,7 @@ class GFFormsModel {
 			}
 		}
 
-		//update post_id field if a post was created
-		$lead['post_id'] = $post_id;
+		// Update the post_id in the database for this entry.
 		GFCommon::log_debug( 'GFFormsModel::create_post(): Updating entry with post id.' );
 		self::update_lead_property( $lead['id'], 'post_id', $post_id );
 
@@ -3501,6 +3510,8 @@ class GFFormsModel {
 		$file = self::copy_post_image( $url, $post_id );
 
 		if ( ! $file ) {
+			GFCommon::log_debug( __METHOD__ . '(): Image could not be copied to the media directory.' );
+
 			return false;
 		}
 
@@ -3539,6 +3550,8 @@ class GFFormsModel {
 		if ( ! is_wp_error( $id ) ) {
 			wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
 		}
+
+		GFCommon::log_debug( __METHOD__ . '(): Image copied to the media directory. Result from wp_insert_attachment(): ' . print_r( $id, 1 ) );
 
 		return $id;
 	}

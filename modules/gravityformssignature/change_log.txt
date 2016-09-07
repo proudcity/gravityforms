@@ -1,10 +1,7 @@
 -------------------------------------------------------------------------------------------------------------------
-Version 3.1.2
-    - Fixed issue where signing with more than three lines corrupted the signature
-
--------------------------------------------------------------------------------------------------------------------
-Version 3.1.1
+Version 3.2
     - Updated field appearance settings label classes for consistency with GF2.0+.
+    - Fixed issue where signing with more than three lines corrupted the signature.
     - Fixed a fatal error if Html2RGB() has already been defined by the theme or another plugin.
 
 -------------------------------------------------------------------------------------------------------------------

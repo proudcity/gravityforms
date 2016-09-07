@@ -1,14 +1,8 @@
 ------------------------------------------------------------
-Version 2.0.3
-    - Fixed an issue with the API override settings.
-
-------------------------------------------------------------
-Version 2.0.2
+Version 2.1
     - Updated logging statements.
     - Updated to abort authorize()/subscribe() before sending request to PayPal if card number not provided.
-
-------------------------------------------------------------
-Version 2.0.1
+    - Fixed an issue with the API override settings.
     - Fixed an issue with check_status() not passing the $action['type'] for use with the related hooks in the framework.
 
 ------------------------------------------------------------

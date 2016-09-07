@@ -1109,7 +1109,7 @@ deny from all';
 
 		GFCommon::log_debug( __METHOD__ . '(): Starting download of file: ' . $filename );
 
-		$charset  = get_option( 'blog_charset' );
+		$charset = get_option( 'blog_charset' );
 		header( 'Content-Description: File Transfer' );
 		header( "Content-Disposition: attachment; filename=$filename" );
 		header( 'Content-Type: text/csv; charset=' . $charset, true );
@@ -1119,18 +1119,17 @@ deny from all';
 		}
 
 		$export_id = rgget( 'export-id' );
-
 		$export_id = sanitize_key( $export_id );
 
 		$export_folder = RGFormsModel::get_upload_root() . 'export/';
-		$file = $export_folder . 'export-' . $export_id . '.csv';
+		$file          = $export_folder . 'export-' . $export_id . '.csv';
 
 		$result = readfile( $file );
-		@unlink( $file );
 
 		if ( $result === false ) {
 			GFCommon::log_error( __METHOD__ . '(): An issue occurred whilst reading the file.' );
 		} else {
+			@unlink( $file );
 			GFCommon::log_debug( __METHOD__ . '(): Number of bytes read from the file: ' . print_r( $result, 1 ) );
 		}
 

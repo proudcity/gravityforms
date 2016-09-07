@@ -1,15 +1,9 @@
 -------------------------------------------------------------------------------------------------------------------
-Version 1.9.3
-    - Fixed an issue with the 'Use Admin Labels' setting on new zaps appearing to reset when saving a valid zap.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.9.2
-    - Updated to format entry date.
-    - Fixed PHP warning which could occur if the multiselect field only had one choice configured.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.9.1
+Version 2.0
     - Added the gform_zapier_sample_field_value filter for overriding the sample data sent when configuring the zap or updating the form.
+    - Updated to format entry date.
+    - Fixed an issue with the 'Use Admin Labels' setting on new zaps appearing to reset when saving a valid zap.
+    - Fixed PHP warning which could occur if the multiselect field only had one choice configured.
 
 -------------------------------------------------------------------------------------------------------------------
 Version 1.9

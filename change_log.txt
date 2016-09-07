@@ -1,4 +1,10 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.0.6.9
+    - Fixed an issue with the subscription start date not showing the correct date in the entry detail page when the subscription start date is set for a day different than the current day.
+    - Updated post creation to include the post_id in the entry earlier in the process.
+    - Updated file upload field to present a validation error and clear field value when a file larger than the maximum file size is selected.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.0.6.8
     - Added the gform_post_recaptcha_render action hook. See https://www.gravityhelp.com/documentation/article/gform_post_recaptcha_render/
     - Fixed an issue with the start_date and end_date filters used with the entry export.
