@@ -1,4 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 3.7.4
+    - Fixed an issue with multi-input fields available for use with groups logic not including the inputs (i.e. Name and Address).
+
+------------------------------------------------------------------------------------------------------------------
 Version 3.7.3
     - Updated the MailChimp API to support the WP_PROXY_HOST and WP_PROXY_PORT constants when configuring the cURL options.
 

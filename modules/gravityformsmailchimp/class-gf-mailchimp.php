@@ -858,7 +858,21 @@ class GFMailChimp extends GFFeedAddOn {
 		$fields = array();
 		foreach ( $form['fields'] as $field ) {
 			if ( $field->is_conditional_logic_supported() ) {
-				$fields[] = array( 'value' => $field->id, 'label' => GFCommon::get_label( $field ) );
+				$inputs = $field->get_entry_inputs();
+
+				if ( $inputs && $field->get_input_type() !== 'checkbox' ) {
+					foreach ( $inputs as $input ) {
+						if ( rgar( $input, 'isHidden' ) ) {
+							continue;
+						}
+						$fields[] = array(
+							'value' => $input['id'],
+							'label' => GFCommon::get_label( $field, $input['id'] )
+						);
+					}
+				} else {
+					$fields[] = array( 'value' => $field->id, 'label' => GFCommon::get_label( $field ) );
+				}
 			}
 		}
 

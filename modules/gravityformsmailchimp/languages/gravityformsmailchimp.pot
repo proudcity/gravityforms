@@ -1,9 +1,9 @@
 # Copyright 2009-2016 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms MailChimp Add-On 3.7.3\n"
+"Project-Id-Version: Gravity Forms MailChimp Add-On 3.7.4\n"
 "Report-Msgid-Bugs-To: http://www.gravtiyhelp.com\n"
-"POT-Creation-Date: 2016-05-06 15:53:27+00:00\n"
+"POT-Creation-Date: 2016-09-16 09:42:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -159,39 +159,39 @@ msgstr ""
 msgid "If"
 msgstr ""
 
-#: class-gf-mailchimp.php:887
+#: class-gf-mailchimp.php:901
 msgid "Abusing this may cause your MailChimp account to be suspended."
 msgstr ""
 
-#: class-gf-mailchimp.php:1020
+#: class-gf-mailchimp.php:1034
 msgid "List not found in MailChimp"
 msgstr ""
 
-#: class-gf-mailchimp.php:1339
+#: class-gf-mailchimp.php:1353
 msgid "MailChimp Add-On v3.0"
 msgstr ""
 
-#: class-gf-mailchimp.php:1341
+#: class-gf-mailchimp.php:1355
 msgid ""
 "Thank you for updating! The new version of the Gravity Forms MailChimp "
 "Add-On makes changes to how you manage your MailChimp integration."
 msgstr ""
 
-#: class-gf-mailchimp.php:1346
+#: class-gf-mailchimp.php:1360
 msgid "Manage MailChimp Contextually"
 msgstr ""
 
-#: class-gf-mailchimp.php:1348
+#: class-gf-mailchimp.php:1362
 msgid ""
 "MailChimp Feeds are now accessed via the MailChimp sub-menu within the Form "
 "Settings for the Form with which you would like to integrate MailChimp."
 msgstr ""
 
-#: class-gf-mailchimp.php:1359
+#: class-gf-mailchimp.php:1373
 msgid "I understand this change, dismiss this message!"
 msgstr ""
 
-#: class-gf-mailchimp.php:1360
+#: class-gf-mailchimp.php:1374
 msgid "Please wait..."
 msgstr ""
 
