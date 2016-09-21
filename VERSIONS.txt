@@ -1,0 +1,8 @@
+gravityforms 2.0.7.4
+gravityformsmailchimp 3.7.4
+gravityformspaypalpaymentspro 2.1
+gravityformspaypalpro 1.6.3
+gravityformssignature 3.2
+gravityformsstripe 2.0.11
+gravityformszapier 2.0
+gravityformssurvey 3.1.2
