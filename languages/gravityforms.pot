@@ -1,9 +1,9 @@
 # Copyright 2009-2016 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms 2.0.7.4\n"
+"Project-Id-Version: Gravity Forms 2.0.7.6\n"
 "Report-Msgid-Bugs-To: http://www.gravtiyhelp.com\n"
-"POT-Creation-Date: 2016-09-19 13:14:52+00:00\n"
+"POT-Creation-Date: 2016-09-26 10:28:30+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -287,7 +287,7 @@ msgid "Update"
 msgstr ""
 
 #: common.php:3771 form_display.php:250 form_display.php:951
-#: form_display.php:2649 js.php:559
+#: form_display.php:2644 js.php:559
 msgid "Previous"
 msgstr ""
 
@@ -721,7 +721,7 @@ msgstr ""
 msgid "You don't have adequate permission to delete notes."
 msgstr ""
 
-#: entry_detail.php:359 entry_list.php:1247 entry_list.php:1273
+#: entry_detail.php:359 entry_list.php:1257 entry_list.php:1283
 #: form_list.php:801
 msgid "You don't have adequate permission to delete entries."
 msgstr ""
@@ -734,7 +734,7 @@ msgstr ""
 msgid "Ajax error while deleting field."
 msgstr ""
 
-#: entry_detail.php:457 entry_list.php:1564
+#: entry_detail.php:457 entry_list.php:1574
 msgid "You must select at least one type of notification to resend."
 msgstr ""
 
@@ -742,7 +742,7 @@ msgstr ""
 msgid "Notifications were resent successfully."
 msgstr ""
 
-#: entry_detail.php:614 entry_list.php:1180 entry_list.php:1961
+#: entry_detail.php:614 entry_list.php:1190 entry_list.php:1971
 msgid "Print"
 msgstr ""
 
@@ -851,7 +851,7 @@ msgstr ""
 msgid "Click to edit post"
 msgstr ""
 
-#: entry_detail.php:1255 entry_list.php:1062 entry_list.php:1170
+#: entry_detail.php:1255 entry_list.php:1072 entry_list.php:1180
 msgid "Not Spam"
 msgstr ""
 
@@ -859,12 +859,12 @@ msgstr ""
 msgid "You are about to delete this entry. 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: entry_detail.php:1261 entry_detail.php:1274 entry_list.php:1040
-#: entry_list.php:1071 entry_list.php:1167 entry_list.php:1171
+#: entry_detail.php:1261 entry_detail.php:1274 entry_list.php:1050
+#: entry_list.php:1081 entry_list.php:1177 entry_list.php:1181
 msgid "Delete Permanently"
 msgstr ""
 
-#: entry_detail.php:1269 entry_list.php:1031 entry_list.php:1166
+#: entry_detail.php:1269 entry_list.php:1041 entry_list.php:1176
 #: form_list.php:494 form_list.php:636 form_list.php:637
 msgid "Restore"
 msgstr ""
@@ -889,20 +889,20 @@ msgid ""
 "currently have any notifications configured."
 msgstr ""
 
-#: entry_detail.php:1342 entry_list.php:1898
+#: entry_detail.php:1342 entry_list.php:1908
 msgid "Configure Notifications"
 msgstr ""
 
-#: entry_detail.php:1358 entry_list.php:1918 notification.php:776
+#: entry_detail.php:1358 entry_list.php:1928 notification.php:776
 msgid "Send To"
 msgstr ""
 
-#: entry_detail.php:1364 entry_list.php:1179 entry_list.php:1521
-#: entry_list.php:1856 entry_list.php:1923
+#: entry_detail.php:1364 entry_list.php:1189 entry_list.php:1531
+#: entry_list.php:1866 entry_list.php:1933
 msgid "Resend Notifications"
 msgstr ""
 
-#: entry_detail.php:1366 entry_list.php:1925
+#: entry_detail.php:1366 entry_list.php:1935
 msgid "Resending..."
 msgstr ""
 
@@ -926,11 +926,11 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: entry_list.php:391 entry_list.php:1100 entry_list.php:1183
+#: entry_list.php:391 entry_list.php:1110 entry_list.php:1193
 msgid "Spam"
 msgstr ""
 
-#: entry_list.php:398 entry_list.php:1109 entry_list.php:1186 form_list.php:674
+#: entry_list.php:398 entry_list.php:1119 entry_list.php:1196 form_list.php:674
 msgid "Trash"
 msgstr ""
 
@@ -938,258 +938,258 @@ msgstr ""
 msgid "click to select columns to display"
 msgstr ""
 
-#: entry_list.php:777
+#: entry_list.php:787
 msgid "Select entry"
 msgstr ""
 
-#: entry_list.php:872 entry_list.php:1026 entry_list.php:1057
-#: entry_list.php:1089
+#: entry_list.php:882 entry_list.php:1036 entry_list.php:1067
+#: entry_list.php:1099
 msgid "View this entry"
 msgstr ""
 
-#: entry_list.php:974
+#: entry_list.php:984
 msgid "This form does not have any unread entries matching the search criteria."
 msgstr ""
 
-#: entry_list.php:974
+#: entry_list.php:984
 msgid "This form does not have any unread entries."
 msgstr ""
 
-#: entry_list.php:978
+#: entry_list.php:988
 msgid "This form does not have any starred entries matching the search criteria."
 msgstr ""
 
-#: entry_list.php:978
+#: entry_list.php:988
 msgid "This form does not have any starred entries."
 msgstr ""
 
-#: entry_list.php:982
+#: entry_list.php:992
 msgid "This form does not have any spam."
 msgstr ""
 
-#: entry_list.php:986
+#: entry_list.php:996
 msgid ""
 "This form does not have any entries in the trash matching the search "
 "criteria."
 msgstr ""
 
-#: entry_list.php:986
+#: entry_list.php:996
 msgid "This form does not have any entries in the trash."
 msgstr ""
 
-#: entry_list.php:990
+#: entry_list.php:1000
 msgid "This form does not have any entries matching the search criteria."
 msgstr ""
 
-#: entry_list.php:990
+#: entry_list.php:1000
 msgid "This form does not have any entries yet."
 msgstr ""
 
-#: entry_list.php:1026 entry_list.php:1057 entry_list.php:1089
+#: entry_list.php:1036 entry_list.php:1067 entry_list.php:1099
 #: includes/addon/class-gf-payment-addon.php:2408
 #: includes/addon/class-gf-payment-addon.php:2409
 msgid "View"
 msgstr ""
 
-#: entry_list.php:1031
+#: entry_list.php:1041
 msgid "Restore this entry"
 msgstr ""
 
-#: entry_list.php:1040 entry_list.php:1071
+#: entry_list.php:1050 entry_list.php:1081
 msgid "Delete this entry permanently"
 msgstr ""
 
-#: entry_list.php:1062
+#: entry_list.php:1072
 msgid "Mark this entry as not spam"
 msgstr ""
 
-#: entry_list.php:1093
+#: entry_list.php:1103
 msgid "Mark read"
 msgstr ""
 
-#: entry_list.php:1093
+#: entry_list.php:1103
 msgid "Mark this entry as unread"
 msgstr ""
 
-#: entry_list.php:1093
+#: entry_list.php:1103
 msgid "Mark unread"
 msgstr ""
 
-#: entry_list.php:1100
+#: entry_list.php:1110
 msgid "Mark this entry as spam"
 msgstr ""
 
-#: entry_list.php:1109
+#: entry_list.php:1119
 msgid "Move this entry to the trash"
 msgstr ""
 
-#: entry_list.php:1137 form_list.php:694
+#: entry_list.php:1147 form_list.php:694
 msgid "Show more details"
 msgstr ""
 
-#: entry_list.php:1175
+#: entry_list.php:1185
 msgid "Mark as Read"
 msgstr ""
 
-#: entry_list.php:1176
+#: entry_list.php:1186
 msgid "Mark as Unread"
 msgstr ""
 
-#: entry_list.php:1177
+#: entry_list.php:1187
 msgid "Add Star"
 msgstr ""
 
-#: entry_list.php:1178
+#: entry_list.php:1188
 msgid "Remove Star"
 msgstr ""
 
-#: entry_list.php:1203
+#: entry_list.php:1213
 msgid ""
 "WARNING! This operation cannot be undone. Empty trash? 'Ok' to empty trash. "
 "'Cancel' to abort."
 msgstr ""
 
-#: entry_list.php:1203
+#: entry_list.php:1213
 msgid ""
 "WARNING! This operation cannot be undone. Permanently delete all spam? 'Ok' "
 "to delete. 'Cancel' to abort."
 msgstr ""
 
-#: entry_list.php:1204
+#: entry_list.php:1214
 msgid "Empty Trash"
 msgstr ""
 
-#: entry_list.php:1204
+#: entry_list.php:1214
 msgid "Delete All Spam"
 msgstr ""
 
-#: entry_list.php:1245
+#: entry_list.php:1255
 msgid "Entry deleted."
 msgstr ""
 
-#: entry_list.php:1265
+#: entry_list.php:1275
 msgid "%d entries"
 msgstr ""
 
-#: entry_list.php:1265
+#: entry_list.php:1275
 msgid "1 entry"
 msgstr ""
 
-#: entry_list.php:1271
+#: entry_list.php:1281
 msgid "%s deleted."
 msgstr ""
 
-#: entry_list.php:1279
+#: entry_list.php:1289
 msgid "%s moved to Trash."
 msgstr ""
 
-#: entry_list.php:1284
+#: entry_list.php:1294
 msgid "%s restored from the Trash."
 msgstr ""
 
-#: entry_list.php:1289
+#: entry_list.php:1299
 msgid "%s restored from the spam."
 msgstr ""
 
-#: entry_list.php:1294
+#: entry_list.php:1304
 msgid "%s marked as spam."
 msgstr ""
 
-#: entry_list.php:1299
+#: entry_list.php:1309
 msgid "%s marked as read."
 msgstr ""
 
-#: entry_list.php:1304
+#: entry_list.php:1314
 msgid "%s marked as unread."
 msgstr ""
 
-#: entry_list.php:1309
+#: entry_list.php:1319
 msgid "%s starred."
 msgstr ""
 
-#: entry_list.php:1314
+#: entry_list.php:1324
 msgid "%s unstarred."
 msgstr ""
 
-#: entry_list.php:1459
+#: entry_list.php:1469
 msgid "Ajax error while setting lead property"
 msgstr ""
 
-#: entry_list.php:1513
+#: entry_list.php:1523
 msgid "Please select at least one entry."
 msgstr ""
 
-#: entry_list.php:1527 entry_list.php:1862
+#: entry_list.php:1537 entry_list.php:1872
 msgid "Print Entries"
 msgstr ""
 
-#: entry_list.php:1589
+#: entry_list.php:1599
 msgid "Notifications for %s were resent successfully."
 msgstr ""
 
-#: entry_list.php:1591
+#: entry_list.php:1601
 msgid "entry"
 msgstr ""
 
-#: entry_list.php:1591
+#: entry_list.php:1601
 msgid "entries"
 msgstr ""
 
-#: entry_list.php:1694
+#: entry_list.php:1704
 msgid "All %s{0}%s entries on this page are selected."
 msgstr ""
 
-#: entry_list.php:1695
+#: entry_list.php:1705
 msgid "Select all %s{0}%s entries."
 msgstr ""
 
-#: entry_list.php:1696
+#: entry_list.php:1706
 msgid "All %s{0}%s entries have been selected."
 msgstr ""
 
-#: entry_list.php:1697
+#: entry_list.php:1707
 msgid "Clear selection"
 msgstr ""
 
-#: entry_list.php:1783
+#: entry_list.php:1793
 msgid "Entry List"
 msgstr ""
 
-#: entry_list.php:1848
+#: entry_list.php:1858
 msgid "Please select at least one entry..."
 msgstr ""
 
-#: entry_list.php:1896
+#: entry_list.php:1906
 msgid ""
 "You cannot resend notifications for these entries because this form does "
 "not currently have any notifications configured."
 msgstr ""
 
-#: entry_list.php:1902
+#: entry_list.php:1912
 msgid ""
 "Specify which notifications you would like to resend for the selected "
 "entries."
 msgstr ""
 
-#: entry_list.php:1916
+#: entry_list.php:1926
 msgid ""
 "You may override the default notification settings by entering a comma "
 "delimited list of emails to which the selected notifications should be sent."
 msgstr ""
 
-#: entry_list.php:1934
+#: entry_list.php:1944
 msgid "Close Window"
 msgstr ""
 
-#: entry_list.php:1949
+#: entry_list.php:1959
 msgid "Print all of the selected entries at once."
 msgstr ""
 
-#: entry_list.php:1953
+#: entry_list.php:1963
 msgid "Include notes"
 msgstr ""
 
-#: entry_list.php:1958
+#: entry_list.php:1968
 msgid "Add page break between entries"
 msgstr ""
 
@@ -1737,7 +1737,7 @@ msgid "Paragraph Text"
 msgstr ""
 
 #: form_detail.php:762 form_detail.php:790 form_detail.php:989
-#: includes/fields/class-gf-field-multiselect.php:18
+#: includes/fields/class-gf-field-multiselect.php:30
 msgid "Multi Select"
 msgstr ""
 
@@ -3357,7 +3357,7 @@ msgstr ""
 msgid "Errors have been highlighted below."
 msgstr ""
 
-#: form_display.php:950 form_display.php:2648
+#: form_display.php:950 form_display.php:2643
 msgid "Previous Page"
 msgstr ""
 
@@ -3410,7 +3410,7 @@ msgstr ""
 msgid "No results matched"
 msgstr ""
 
-#: form_display.php:2326 form_display.php:2829
+#: form_display.php:2326 form_display.php:2831
 msgid "of"
 msgstr ""
 
@@ -3426,42 +3426,42 @@ msgstr ""
 msgid "Mismatch"
 msgstr ""
 
-#: form_display.php:2644
+#: form_display.php:2649
 msgid "Next Page"
 msgstr ""
 
-#: form_display.php:2645
+#: form_display.php:2650
 #: includes/wizard/steps/class-gf-installation-wizard-step.php:102 js.php:557
 msgid "Next"
 msgstr ""
 
-#: form_display.php:2781
+#: form_display.php:2783
 msgid ""
 "This page is unsecured. Do not enter a real credit card number! Use this "
 "field only for testing purposes. "
 msgstr ""
 
-#: form_display.php:2829
+#: form_display.php:2831
 msgid "Step"
 msgstr ""
 
-#: form_display.php:2913
+#: form_display.php:2915
 msgid "Sorry. This form is no longer accepting new submissions."
 msgstr ""
 
-#: form_display.php:2930
+#: form_display.php:2932
 msgid "This form is not yet available."
 msgstr ""
 
-#: form_display.php:2932
+#: form_display.php:2934
 msgid "Sorry. This form is no longer available."
 msgstr ""
 
-#: form_display.php:3066
+#: form_display.php:3068
 msgid "Send Email"
 msgstr ""
 
-#: form_display.php:3067 includes/fields/class-gf-field-email.php:50
+#: form_display.php:3069 includes/fields/class-gf-field-email.php:50
 msgid "Please enter a valid email address."
 msgstr ""
 
@@ -7668,7 +7668,7 @@ msgstr ""
 msgid "Remove this row"
 msgstr ""
 
-#: includes/fields/class-gf-field-multiselect.php:89
+#: includes/fields/class-gf-field-multiselect.php:115
 msgid "Click to select..."
 msgstr ""
 

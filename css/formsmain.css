@@ -2,9 +2,9 @@
 ----------------------------------------------------------------
 
 Gravity Forms Front End Form Styles
-Version 2.0
+Version 2.0 -
 http: //www.gravityforms.com
-updated: September 12, 2016 10:41 AM GMT-5
+updated: September 22, 2016 5:15 AM GMT-5
 
 Gravity Forms is a Rocketgenius project
 copyright 2008-2016 Rocketgenius Inc.
@@ -29,9 +29,9 @@ to no.
 /* mobile styles first */
 
 .gform_wrapper {
-    overflow: inherit;
+    overflow-x: hidden;
     margin: 16px 0;
-    max-width: calc(100% + 16px);
+    max-width: 100%;
 }
 
 .gform_wrapper *,
@@ -765,6 +765,7 @@ div.gf_page_steps+div.validation_error {
     padding: 16px 0 10px 0;
     margin: 16px 0 0 0;
     clear: both;
+    width: 100%;
 }
 
 .gform_wrapper .gform_footer input.button,
@@ -1027,7 +1028,7 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
 
 .gform_wrapper .gform_page_footer {
     margin: 14px 0;
-    width: 99%;
+    width: calc(100% - 6px);
     border-top: 1px dotted #CCC;
     padding: 16px 0 0 0;
     clear: both;
@@ -1130,6 +1131,7 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
     text-shadow: none;
     float: none !important;
     margin-left: 12px;
+    word-wrap: normal;
 }
 
 .gform_wrapper .percentbar_blue {
