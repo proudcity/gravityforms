@@ -450,9 +450,10 @@ class GFFormDisplay {
 	 * Determine if form has any pages.
 	 * 
 	 * @access private
-	 * @static
-	 * @param array $form - The form object
-	 * @return bool - If form object has any pages
+	 *
+	 * @param array $form The form object
+	 *
+	 * @return bool If form object has any pages
 	 */
 	private static function has_pages( $form ) {
 		return GFCommon::has_pages( $form );
@@ -1175,6 +1176,17 @@ class GFFormDisplay {
 		$button_input = gf_apply_filters( array( 'gform_submit_button', $form_id ), $button_input, $form );
 
 		$save_button = rgars( $form, 'save/enabled' ) ? self::get_form_button( $form_id, "gform_save_{$form_id}", $form['save']['button'], rgars( $form, 'save/button/text' ), 'gform_save_link', rgars( $form, 'save/button/text' ), 0, "jQuery(\"#gform_save_{$form_id}\").val(1);" ) : '';
+
+		/**
+		 * Filters the save and continue link allowing the tag to be customized
+		 *
+		 * @since 2.0.7.7
+		 *
+		 * @param string $save_button The string containing the save and continue link markup.
+		 * @param array  $form        The Form object associated with the link.
+		 */
+		$save_button = apply_filters( 'gform_savecontinue_link', $save_button, $form );
+		$save_button = apply_filters( "gform_savecontinue_link_{$form_id}", $save_button, $form );
 
 		$footer .= $previous_button . ' ' . $button_input . ' ' . $save_button;
 
@@ -2652,6 +2664,18 @@ class GFFormDisplay {
 
 				$save_button = rgars( $form, 'save/enabled' ) ? self::get_form_button( $form['id'], "gform_save_{$form['id']}", $form['save']['button'], rgars( $form, 'save/button/text' ), 'gform_save_link', rgars( $form, 'save/button/text' ), 0, "jQuery(\"#gform_save_{$form['id']}\").val(1);" ) : '';
 
+				/**
+				 * Filters the save and continue link allowing the tag to be customized
+				 *
+				 * @since 2.0.7.7
+				 *
+				 * @param string $save_button The string containing the save and continue link markup.
+				 * @param array  $form        The Form object associated with the link.
+				 */
+				$save_button = apply_filters( 'gform_savecontinue_link', $save_button, $form );
+				$save_button = apply_filters( "gform_savecontinue_link_{$form['id']}", $save_button, $form );
+
+
 				$style        = self::is_page_active( $form['id'], $field->pageNumber ) ? '' : "style='display:none;'";
 				$custom_class = ! empty( $custom_class ) ? " {$custom_class}" : '';
 				$html         = "</ul>
@@ -3219,11 +3243,13 @@ class GFFormDisplay {
 
 	/**
 	 * Insert review page into form.
-	 * 
+	 *
+	 * @since  Unknown
 	 * @access public
-	 * @static
-	 * @param array $form - The current Form object
-	 * @param array $review_page - The review page
+	 *
+	 * @param array $form        The current Form object
+	 * @param array $review_page The review page
+	 *
 	 * @return array $form
 	 */
 	public static function insert_review_page( $form, $review_page ) {

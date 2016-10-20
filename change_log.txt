@@ -7,6 +7,38 @@ Please do not change or add any translatable strings
 *******************************************************
 
 ------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.13
+    - Fixed an issue with the advanced field buttons.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.12
+	- Added gform_rfc_url_validation hook to control whether or not URL validation conforms with RFC standard. Defaults to true.
+	- Added gform_is_valid_url hook to allow for custom URL validation.
+	- AF: Fixed fatal error with the add-on specific version of the gform_addon_field_map_choices filter.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.11
+    - Updated how the tooltip styles and scripts are included.
+    - AF: Added the gform_addon_field_map_choices filter allowing the choices in the field map drop down to be overridden.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.10
+    - Fixed an issue with the confirmation settings for users without the unfiltered_html capability where merge tags used as attributes get mangled instead of removed.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.9
+    - Fixed PHP warning if a query string parameter uses array notation.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.8
+	- Updated GF_ShowEditTitle() to automatically give the edit title input focus.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.7
+	- Added the gform_savecontinue_link filter for customizing the save and continue links.
+	- Added GFFormDetail::get_field_groups() method.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.0.7.6
     - Added the gform_entry_list_columns filter for overriding the columns to be displayed on the entry list page.
 

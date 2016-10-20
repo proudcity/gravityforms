@@ -2,9 +2,8 @@
 ----------------------------------------------------------------
 
 Gravity Forms Front End Form Styles
-Version 2.0 -
 http: //www.gravityforms.com
-updated: September 22, 2016 5:15 AM GMT-5
+updated: September 26, 2016 3:21 PM GMT-5
 
 Gravity Forms is a Rocketgenius project
 copyright 2008-2016 Rocketgenius Inc.
@@ -313,12 +312,13 @@ html>body .entry ul,
     white-space: nowrap;
 }
 
-.gform_wrapper .field_sublabel_above ul.gfield_radio li label,
-.gform_wrapper .field_sublabel_below ul.gfield_checkbox li label {
+.gform_wrapper ul.gfield_radio li label,
+.gform_wrapper ul.gfield_checkbox li label {
     display: -moz-inline-stack;
     display: inline-block;
     letter-spacing: inherit;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .gform_wrapper .field_sublabel_above .ginput_complex.ginput_container label,
@@ -2337,6 +2337,12 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
 
     .gform_wrapper li.field_sublabel_below .ginput_complex {
         margin-top: 12px !important;
+    }
+
+    .gform_wrapper ul.gfield_radio li label,
+    .gform_wrapper ul.gfield_checkbox li label {
+        width: 85%;
+        cursor: pointer;
     }
 
  }

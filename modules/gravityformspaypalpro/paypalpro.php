@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms PayPal Pro Add-On
 Plugin URI: http://www.gravityforms.com
 Description: Integrates Gravity Forms with PayPal Pro, enabling end users to purchase goods and services through Gravity Forms.
-Version: 1.6.3
+Version: 1.7
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityformspaypalpro
@@ -37,8 +37,8 @@ class GFPayPalPro {
     private static $path = "gravityformspaypalpro/paypalpro.php";
     private static $url = "http://www.gravityforms.com";
     private static $slug = "gravityformspaypalpro";
-    private static $version = "1.6.3";
-    private static $min_gravityforms_version = "1.9.6";
+    private static $version = "1.7";
+    private static $min_gravityforms_version = "1.9.14";
     private static $production_url = "https://api-3t.paypal.com/nvp";
     private static $sandbox_url = "https://api-3t.sandbox.paypal.com/nvp";
     public static $production_express_checkout_url = "https://www.paypal.com/cgi-bin/webscr";
@@ -2117,10 +2117,20 @@ class GFPayPalPro {
     }
 
     private static function is_ready_for_capture($validation_result){
+        $form            = $validation_result['form'];
+        $is_last_page    = GFFormDisplay::is_last_page( $form );
+        $failed_honeypot = false;
 
-        //if form has already failed validation or this is not the last page, abort
-        if($validation_result["is_valid"] == false || !self::is_last_page($validation_result["form"]))
+        if ( $is_last_page && rgar( $form, 'enableHoneypot' ) ) {
+            $honeypot_id     = GFFormDisplay::get_max_field_id( $form ) + 1;
+            $failed_honeypot = ! rgempty( "input_{$honeypot_id}" );
+        }
+
+        $is_heartbeat = rgpost( 'action' ) == 'heartbeat'; // Validation called by partial entries feature via the heartbeat API.
+
+        if ( ! $validation_result['is_valid'] || ! $is_last_page || $failed_honeypot || $is_heartbeat ) {
             return false;
+        }
 
         //getting config that matches condition (if conditions are enabled)
         $config = self::get_config($validation_result["form"]);

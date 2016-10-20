@@ -150,9 +150,13 @@ abstract class GFAddOn {
 
 	/**
 	 * Gets all active, registered Add-Ons.
-	 * 
-	 * @static
-	 * @return array - Active, registered Add-Ons
+	 *
+	 * @since  Unknown
+	 * @access public
+	 *
+	 * @uses GFAddOn::$_registered_addons
+	 *
+	 * @return array Active, registered Add-Ons.
 	 */
 	public static function get_registered_addons() {
 		return self::$_registered_addons['active'];
@@ -2021,6 +2025,22 @@ abstract class GFAddOn {
 				}
 			}
 		}
+
+		$addon = call_user_func( array( get_called_class(), 'get_instance' ) );
+		$slug  = $addon->get_slug();
+
+		/**
+		 * Filter the choices available in the field map drop down.
+		 *
+		 * @since 2.0.7.11
+		 *
+		 * @param array             $fields              The value and label properties for each choice.
+		 * @param int               $form_id             The ID of the form currently being configured.
+		 * @param null|array        $field_type          Null or the field types to be included in the drop down.
+		 * @param null|array|string $exclude_field_types Null or the field type(s) to be excluded from the drop down.
+		 */
+		$fields = apply_filters( 'gform_addon_field_map_choices', $fields, $form_id, $field_type, $exclude_field_types );
+		$fields = apply_filters( "gform_{$slug}_field_map_choices", $fields, $form_id, $field_type, $exclude_field_types );
 
  		return $fields;
 	}
