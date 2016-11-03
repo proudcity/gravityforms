@@ -1279,7 +1279,16 @@ class GFFormDisplay {
 	}
 
 	private static function get_honeypot_labels() {
-		return array( 'Name', 'Email', 'Phone', 'Comments' );
+		$honeypot_labels = array( 'Name', 'Email', 'Phone', 'Comments' );
+
+		/**
+		 * Allow the honeypot field labels to be overridden.
+		 *
+		 * @since 2.0.7.16
+		 *
+		 * @param array $honeypot_labels The honeypot field labels.
+		 */
+		return apply_filters( 'gform_honeypot_labels_pre_render', $honeypot_labels );
 	}
 
 	/**

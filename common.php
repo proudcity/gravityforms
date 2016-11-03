@@ -180,6 +180,11 @@ class GFCommon {
         if ( ! is_dir( $upload_root ) ) {
             return;
         }
+
+	    if ( ! wp_is_writable( $upload_root ) ) {
+		    return;
+	    }
+
 	    $htaccess_file = $upload_root . '.htaccess';
 	    if ( file_exists( $htaccess_file ) ) {
 		    @unlink( $htaccess_file );

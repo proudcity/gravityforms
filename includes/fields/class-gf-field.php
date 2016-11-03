@@ -237,7 +237,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 		return $field_content;
 	}
 
-	public function get_field_label_class(){
+	public function get_field_label_class() {
 		return 'gfield_label';
 	}
 

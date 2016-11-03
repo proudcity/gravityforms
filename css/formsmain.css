@@ -3,7 +3,7 @@
 
 Gravity Forms Front End Form Styles
 http: //www.gravityforms.com
-updated: September 26, 2016 3:21 PM GMT-5
+updated: October 20, 2016 10:51 AM GMT-5
 
 Gravity Forms is a Rocketgenius project
 copyright 2008-2016 Rocketgenius Inc.
@@ -28,15 +28,21 @@ to no.
 /* mobile styles first */
 
 .gform_wrapper {
-    overflow-x: hidden;
     margin: 16px 0;
     max-width: 100%;
+}
+
+.gform_wrapper form {
+    text-align: left;
+    overflow-x: hidden;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .gform_wrapper *,
 .gform_wrapper *:before,
 .gform_wrapper *:after {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
 }
 
 .gform_wrapper h1,
@@ -47,9 +53,7 @@ to no.
     background: none;
 }
 
-.gform_wrapper form {
-    text-align: left
-}
+
 
 .gform_wrapper input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']) {
     font-size: inherit;
@@ -89,6 +93,7 @@ to no.
 .gform_wrapper ul.gform_fields {
     margin: 0 !important;
     list-style-type: none;
+    display: block;
 }
 
 html>body .entry ul,
@@ -623,12 +628,8 @@ li.gfield + li.gfield.gfield_creditcard_warning {
     margin-top: 16px !important;
 }
 
-.gform_wrapper .top_label .gfield_error .ginput_container {
-    max-width: 100%;
-}
-
 .gform_wrapper .top_label .gfield_error {
-    width: 100%;
+    width: calc(100% - 2px);
 }
 
 .gform_wrapper .top_label .gfield_error input.large,
@@ -657,10 +658,6 @@ li.gfield + li.gfield.gfield_creditcard_warning {
 .gform_wrapper li.gfield.gfield_error.gfield_contains_required div.gfield_time_minute.ginput_container,
 .gform_wrapper li.gfield.gfield_error.gfield_contains_required div.gfield_time_ampm.ginput_container {
     margin-left: 0;
-}
-
-.gform_wrapper li.gfield.gfield_error.gfield_contains_required div.ginput_container {
-    max-width: 100%;
 }
 
 .gform_wrapper li.gfield.gfield_error.gfield_contains_required div.gfield_description {
@@ -2276,14 +2273,6 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
     margin-top: -1px;
 }
 
-.gf_icon_color {
-    width: 16px;
-    height: 16px;
-    background-image: url(../images/color.svg);
-    background-repeat;
-    background-size: 16px 16px;
-}
-
 @media only screen and (max-width: 641px)  {
 
     /* make the inputs a little larger for mobile devices */
@@ -2457,6 +2446,10 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
         width: calc(100% + 16px);
     }
 
+    .gform_wrapper.gform_validation_error .gform_body ul li.gfield.gfield_error:not(.gf_left_half):not(.gf_right_half) {
+        max-width: calc(100% - 16px) !important;
+    }
+
     .gform_wrapper .gfield_checkbox li,
     .gform_wrapper .gfield_radio li {
         margin: 0 0 8px 0;
@@ -2535,7 +2528,7 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
     .gform_wrapper .right_label select.medium,
     .gform_wrapper .left_label input.medium,
     .gform_wrapper .left_label select.medium {
-        width: 35%;
+        width: calc(35% - 8px);
     }
 
     .gform_wrapper .right_label input.large,
@@ -2589,7 +2582,12 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
 
     .gform_wrapper .top_label input.medium,
     .gform_wrapper .top_label select.medium {
-        width: 49.5%;
+        width: calc(50% - 8px);
+    }
+
+    .gform_wrapper.gform_validation_error .top_label input.medium,
+    .gform_wrapper.gform_validation_error .top_label select.medium {
+        width: 50%;
     }
 
     .gform_wrapper .top_label input.large,
@@ -2766,6 +2764,12 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
         margin-left: 29%;
     }
 
+    ul.gform_fields:not(.top_label) li.gfield.gfield_error div.ginput_complex.ginput_container.gf_name_has_1,
+    ul.gform_fields:not(.top_label) li.gfield.gfield_error div.ginput_complex.ginput_container.gf_name_has_2,
+    ul.gform_fields:not(.top_label) li.gfield.gfield_error div.ginput_complex.ginput_container.gf_name_has_3 {
+        width: calc(70% + 24px);
+    }
+
     ul.gform_fields:not(.top_label) div.ginput_complex.ginput_container.gf_name_has_4 {
         width: calc(70% + 13px);
         margin-left: 29%;
@@ -2825,10 +2829,10 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
         width: 19.75% !important;
     }
 
-    html:not[dir="rtl"] div.ginput_complex.ginput_container.gf_name_has_2 span:first-child,
-    html:not[dir="rtl"] div.ginput_complex.ginput_container.gf_name_has_3 span:first-child,
-    html:not[dir="rtl"] div.ginput_complex.ginput_container.gf_name_has_4 span:first-child,
-    html:not[dir="rtl"] div.ginput_complex.ginput_container.gf_name_has_5 span:first-child {
+    html div.ginput_complex.ginput_container.gf_name_has_2 span:first-child,
+    html div.ginput_complex.ginput_container.gf_name_has_3 span:first-child,
+    html div.ginput_complex.ginput_container.gf_name_has_4 span:first-child,
+    html div.ginput_complex.ginput_container.gf_name_has_5 span:first-child {
         margin-left: 0!important;
     }
 
@@ -2836,9 +2840,19 @@ body .gform_wrapper div.gform_body ul.gform_fields li.gfield.gfield_html dl dd {
         width: calc(100% + 15px);
     }
 
-    .gform_wrapper ul.gform_fields:not(.top_label) .ginput_complex.ginput_container.ginput_container_email {
+    .gform_wrapper ul.gform_fields:not(.top_label) div.ginput_complex.ginput_container.ginput_container_email {
         width: calc(70% + 16px);
         margin-left: 29%;
+    }
+
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gfield.gfield_error div.ginput_complex.ginput_container.ginput_container_email {
+        width: calc(70% + 17px);
+    }
+
+    li.gfield.gfield_error
+
+    .gform_wrapper ul.gform_fields:not(.top_label) li.gfield.gfield_error .ginput_complex.ginput_container.ginput_container_email {
+        width: calc(70% + 8px) !important;
     }
 
     .gform_wrapper .ginput_complex.ginput_container.ginput_container_email .ginput_left,

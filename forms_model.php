@@ -1390,6 +1390,8 @@ class GFFormsModel {
 		 */
 		do_action( 'gform_post_form_trashed', $form_id );
 
+		self::update_recent_forms( $form_id, true );
+
 		return $success;
 	}
 
@@ -1651,16 +1653,23 @@ class GFFormsModel {
 			return;
 		}
 
-		//Convert from url to physical path
+		$file_path = self::get_phsyical_file_path( $url );
+
+		if ( file_exists( $file_path ) ) {
+			unlink( $file_path );
+		}
+	}
+
+	public static function get_phsyical_file_path( $url ) {
+
+		// convert from url to physical path
 		if ( is_multisite() && get_site_option( 'ms_files_rewriting' ) ) {
 			$file_path = preg_replace( "|^(.*?)/files/gravity_forms/|", BLOGUPLOADDIR . 'gravity_forms/', $url );
 		} else {
 			$file_path = str_replace( WP_CONTENT_URL, WP_CONTENT_DIR, $url );
 		}
 
-		if ( file_exists( $file_path ) ) {
-			unlink( $file_path );
-		}
+		return $file_path;
 	}
 
 	public static function delete_field( $form_id, $field_id ) {
@@ -5840,6 +5849,39 @@ class GFFormsModel {
 
 	public static function is_valid_operator( $operator ) {
 		return in_array( strtolower( $operator ) , array( 'is', 'isnot', '<>', 'not in', 'in', '>', '<', 'contains', 'starts_with', 'ends_with', 'like', '>=', '<=' ) );
+	}
+
+	/**
+	 * Update the recent forms list for the current user when a form is edited or trashed.
+	 *
+	 * @since 2.0.7.14
+	 *
+	 * @param int $form_id The ID of the current form.
+	 * @param bool $trashed Indicates if the form was trashed. Default is false, form was opened for editing.
+	 */
+	public static function update_recent_forms( $form_id, $trashed = false ) {
+		if ( ! get_option( 'gform_enable_toolbar_menu' ) ) {
+			return;
+		}
+
+		$current_user_id = get_current_user_id();
+		$recent_form_ids = get_user_meta( $current_user_id, 'gform_recent_forms', true );
+
+		$i = array_search( $form_id, $recent_form_ids );
+
+		if ( $i !== false ) {
+			unset( $recent_form_ids[ $i ] );
+			$recent_form_ids = array_values( $recent_form_ids );
+		}
+
+		if ( ! $trashed ) {
+			// Add the current form to the top of the list.
+			array_unshift( $recent_form_ids, $form_id );
+
+			$recent_form_ids = array_slice( $recent_form_ids, 0, 10 );
+		}
+
+		update_user_meta( $current_user_id, 'gform_recent_forms', $recent_form_ids );
 	}
 }
 

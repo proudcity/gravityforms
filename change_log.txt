@@ -7,6 +7,23 @@ Please do not change or add any translatable strings
 *******************************************************
 
 ------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.16
+    - Added the gform_honeypot_labels_pre_render filter.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.15
+    - Added GFFormsModel::get_phsyical_file_path() method; refactored from code in the GFFormsModel::delete_physical_file() method.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.0.7.14
+    - Updated the registration of some JavaScript files to use the minified version by default.
+    - Fixed an issue with the recent forms list not updating when forms are trashed.
+    - Fixed a PHP warning on some systems where the cron task is unable to to create files.
+    - Updated the default css and ready class css for better horizontal field justification.
+    - AF: Added gform_fieldmap_add_row Javascript action when adding a new row to a dynamic field map.
+    - AF: Updated jQuery Repeater plugin to support input fields for value.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.0.7.13
     - Fixed an issue with the advanced field buttons.
 

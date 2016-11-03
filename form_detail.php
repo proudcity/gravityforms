@@ -3033,23 +3033,6 @@ class GFFormDetail {
 	 * @param $form_id
 	 */
 	public static function update_recent_forms( $form_id ) {
-		if ( ! get_option( 'gform_enable_toolbar_menu' ) ) {
-			return;
-		}
-		$current_user_id = get_current_user_id();
-		$recent_form_ids = get_user_meta( $current_user_id, 'gform_recent_forms', true );
-
-		$i = array_search( $form_id, $recent_form_ids );
-
-		if ( $i !== false ) {
-			unset( $recent_form_ids[ $i ] );
-			$recent_form_ids = array_values( $recent_form_ids );
-		}
-
-		array_unshift($recent_form_ids,$form_id);
-
-		$recent_form_ids = array_slice( $recent_form_ids, 0, 10 );
-
-		update_user_meta( $current_user_id, 'gform_recent_forms', $recent_form_ids );
+		GFFormsModel::update_recent_forms( $form_id );
 	}
 }
