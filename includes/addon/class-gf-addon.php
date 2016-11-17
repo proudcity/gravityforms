@@ -1,15 +1,17 @@
 <?php
+/**
+ * @package GFAddOn
+ * @author  Rocketgenius
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
 /**
- * Handles all tasks mostly common to any Gravity Forms Add-On, including third party ones
+ * Class GFAddOn
  *
- *
- * @package GFAddOn
- * @author  Rocketgenius
+ * Handles all tasks mostly common to any Gravity Forms Add-On, including third party ones.
  */
 abstract class GFAddOn {
 
@@ -2026,9 +2028,6 @@ abstract class GFAddOn {
 			}
 		}
 
-		$addon = call_user_func( array( get_called_class(), 'get_instance' ) );
-		$slug  = $addon->get_slug();
-
 		/**
 		 * Filter the choices available in the field map drop down.
 		 *
@@ -2040,7 +2039,14 @@ abstract class GFAddOn {
 		 * @param null|array|string $exclude_field_types Null or the field type(s) to be excluded from the drop down.
 		 */
 		$fields = apply_filters( 'gform_addon_field_map_choices', $fields, $form_id, $field_type, $exclude_field_types );
-		$fields = apply_filters( "gform_{$slug}_field_map_choices", $fields, $form_id, $field_type, $exclude_field_types );
+
+		$callable = array( get_called_class(), 'get_instance' );
+		if ( is_callable( $callable ) ) {
+			$addon = call_user_func( $callable );
+			$slug  = $addon->get_slug();
+
+			$fields = apply_filters( "gform_{$slug}_field_map_choices", $fields, $form_id, $field_type, $exclude_field_types );
+		}
 
  		return $fields;
 	}

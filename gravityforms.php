@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: http://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.0.7.16
+Version: 2.1.1.2
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityforms
@@ -210,7 +210,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.0.7.16';
+	public static $version = '2.1.1.1';
 
 	/**
 	 * Runs after Gravity Forms is loaded.
@@ -270,7 +270,7 @@ class GFForms {
 		GF_Download::maybe_process();
 
 		//load text domains
-		GFCommon::load_gf_text_domain();
+		GFCommon::load_gf_text_domain( 'gravityforms' );
 
 		add_filter( 'gform_logging_supported', array( 'RGForms', 'set_logging_supported' ) );
 		add_action( 'admin_head', array( 'GFCommon', 'maybe_output_gf_vars' ) );
@@ -293,7 +293,13 @@ class GFForms {
 
 			global $current_user;
 
-			// Members plugin integration. Adding Gravity Forms roles to the checkbox list
+			//Site registration hooks
+			//add_action( 'add_option_rg_gforms_key', 	array( 'GFSettings', 'action_add_option_rg_gforms_key' ), 	10, 2 );
+			//add_action( 'update_option_rg_gforms_key', 	array( 'GFSettings', 'action_update_option_rg_gforms_key' ),10, 2 );
+			//add_action( 'delete_option_rg_gforms_key', 	array( 'GFSettings', 'action_delete_option_rg_gforms_key' ),10, 2 );
+
+
+			//Members plugin integration. Adding Gravity Forms roles to the checkbox list
 			if ( self::has_members_plugin() ) {
 				add_filter( 'members_get_capabilities', array( 'RGForms', 'members_get_capabilities' ) );
 			}
@@ -1392,7 +1398,7 @@ SET d.value = l.value"
 		global $wp_styles;
 		$wp_required_styles = array( 'admin-bar', 'colors', 'ie', 'wp-admin', 'editor-style' );
 		$gf_required_styles = array(
-			'common'                     => array(),
+			'common'                     => array( 'gform_tooltip', 'gform_font_awesome' ),
 			'gf_edit_forms'              => array( 'thickbox', 'editor-buttons', 'wp-jquery-ui-dialog', 'media-views', 'buttons', 'wp-pointer' ),
 			'gf_edit_forms_notification' => array( 'thickbox', 'editor-buttons', 'wp-jquery-ui-dialog', 'media-views', 'buttons' ),
 			'gf_new_form'                => array( 'thickbox' ),
@@ -1822,7 +1828,7 @@ SET d.value = l.value"
 
 		// Gravity Forms pages
 		$current_page = trim( strtolower( self::get( 'page' ) ) );
-		$gf_pages     = array( 'gf_edit_forms', 'gf_new_form', 'gf_entries', 'gf_settings', 'gf_export', 'gf_addons', 'gf_help' );
+		$gf_pages     = array( 'gf_edit_forms', 'gf_new_form', 'gf_entries', 'gf_settings', 'gf_export', 'gf_help' );
 
 		return in_array( $current_page, $gf_pages );
 	}
@@ -2511,27 +2517,28 @@ SET d.value = l.value"
 
 		$base_url = GFCommon::get_base_url();
 		$version  = GFForms::$version;
+		$min      = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
-
-		wp_register_script( 'gform_chosen', $base_url . '/js/chosen.jquery.min.js', array( 'jquery' ), $version );
+		wp_register_script( 'gform_chosen',            $base_url . '/js/chosen.jquery.min.js', array( 'jquery' ), $version );
 		wp_register_script( 'gform_conditional_logic', $base_url . "/js/conditional_logic{$min}.js", array( 'jquery', 'gform_gravityforms' ), $version );
-		wp_register_script( 'gform_datepicker_init', $base_url . "/js/datepicker{$min}.js", array( 'jquery', 'jquery-ui-datepicker', 'gform_gravityforms' ), $version, true );
-		wp_register_script( 'gform_floatmenu', $base_url . "/js/floatmenu_init{$min}.js", array( 'jquery' ), $version );
-		wp_register_script( 'gform_form_admin', $base_url . "/js/form_admin{$min}.js", array( 'jquery', 'jquery-ui-autocomplete', 'gform_placeholder' ), $version );
-		wp_register_script( 'gform_form_editor', $base_url . "/js/form_editor{$min}.js", array( 'jquery', 'gform_json', 'gform_placeholder' ), $version );
-		wp_register_script( 'gform_forms', $base_url . "/js/forms{$min}.js", array( 'jquery' ), $version );
-		wp_register_script( 'gform_gravityforms', $base_url . "/js/gravityforms{$min}.js", array( 'jquery', 'gform_json' ), $version );
-		wp_register_script( 'gform_json', $base_url . "/js/jquery.json{$min}.js", array( 'jquery' ), $version, true );
-		wp_register_script( 'gform_masked_input', $base_url . '/js/jquery.maskedinput.min.js', array( 'jquery' ), $version );
-		wp_register_script( 'gform_menu', $base_url . "/js/menu{$min}.js", array( 'jquery' ), $version );
-		wp_register_script( 'gform_placeholder', $base_url . '/js/placeholders.jquery.min.js', array( 'jquery' ), $version );
-		wp_register_script( 'gform_tooltip_init', $base_url . "/js/tooltip_init{$min}.js", array( 'jquery-ui-tooltip' ), $version );
-		wp_register_script( 'gform_textarea_counter', $base_url . "/js/jquery.textareaCounter.plugin{$min}.js", array( 'jquery' ), $version );
-		wp_register_script( 'gform_field_filter', $base_url . "/js/gf_field_filter{$min}.js", array( 'jquery', 'gform_datepicker_init' ), $version );
-		wp_register_script( 'gform_shortcode_ui', $base_url . "/js/shortcode-ui{$min}.js", array( 'jquery', 'wp-backbone' ), $version, true );
+		wp_register_script( 'gform_datepicker_init',   $base_url . "/js/datepicker{$min}.js", array( 'jquery', 'jquery-ui-datepicker', 'gform_gravityforms' ), $version, true );
+		wp_register_script( 'gform_floatmenu',         $base_url . "/js/floatmenu_init{$min}.js", array( 'jquery' ), $version );
+		wp_register_script( 'gform_form_admin',        $base_url . "/js/form_admin{$min}.js", array( 'jquery', 'jquery-ui-autocomplete', 'gform_placeholder' ), $version );
+		wp_register_script( 'gform_form_editor',       $base_url . "/js/form_editor{$min}.js", array( 'jquery', 'gform_json', 'gform_placeholder' ), $version );
+		wp_register_script( 'gform_forms',             $base_url . "/js/forms{$min}.js", array( 'jquery' ), $version );
+		wp_register_script( 'gform_gravityforms',      $base_url . "/js/gravityforms{$min}.js", array( 'jquery', 'gform_json' ), $version );
+		wp_register_script( 'gform_json',              $base_url . "/js/jquery.json{$min}.js", array( 'jquery' ), $version, true );
+		wp_register_script( 'gform_masked_input',      $base_url . '/js/jquery.maskedinput.min.js', array( 'jquery' ), $version );
+		wp_register_script( 'gform_menu',              $base_url . "/js/menu{$min}.js", array( 'jquery' ), $version );
+		wp_register_script( 'gform_placeholder',       $base_url . '/js/placeholders.jquery.min.js', array( 'jquery' ), $version );
+		wp_register_script( 'gform_tooltip_init',      $base_url . "/js/tooltip_init{$min}.js", array( 'jquery-ui-tooltip' ), $version );
+		wp_register_script( 'gform_textarea_counter',  $base_url . "/js/jquery.textareaCounter.plugin{$min}.js", array( 'jquery' ), $version );
+		wp_register_script( 'gform_field_filter',      $base_url . "/js/gf_field_filter{$min}.js", array( 'jquery', 'gform_datepicker_init' ), $version );
+		wp_register_script( 'gform_shortcode_ui',      $base_url . "/js/shortcode-ui{$min}.js", array( 'jquery', 'wp-backbone' ), $version, true );
 
 		wp_register_style( 'gform_shortcode_ui', $base_url . "/css/shortcode-ui{$min}.css", array(), $version );
+		wp_register_style( 'gform_font_awesome', $base_url . "/css/font-awesome{$min}.css", null, $version );
+		wp_register_style( 'gform_tooltip',      $base_url . "/css/tooltip{$min}.css", array( 'gform_font_awesome' ), $version );
 
 	}
 
@@ -3163,27 +3170,23 @@ SET d.value = l.value"
 		$address_type  = rgpost( 'address_type' );
 		$value         = rgpost( 'value' );
 		$id            = rgpost( 'id' );
+		$form_id       = rgpost( 'form_id' );
+
 		$address_field = new GF_Field_Address();
+		$address_types = $address_field->get_address_types( $form_id );
 		$markup        = '';
 
+		$type_obj = $address_type && isset( $address_types[ $address_type ] ) ? $address_types[ $address_type ] : 'international';
+
 		switch( $address_type ) {
-			case '':
 			case 'international':
 				$items = $address_field->get_countries();
 				break;
-			case 'us':
-				$items = $address_field->get_us_states();
-				break;
-			case 'canadian':
-				$items = $address_field->get_canadian_provinces();
-				break;
+			default:
+				$items = $type_obj['states'];
 		}
 
-		foreach( $items as $item ) {
-			$markup .= sprintf( '<option value="%1$s" %2$s>%1$s</option>', $item, selected( $value, $item, false ) );
-		}
-
-		$markup = sprintf( '<select id="%1$s" name="%1$s" class="gfield_rule_select gfield_rule_value_dropdown">%2$s</select>', $id, $markup );
+		$markup = sprintf( '<select id="%1$s" name="%1$s" class="gfield_rule_select gfield_rule_value_dropdown">%2$s</select>', $id, $address_field->get_state_dropdown( $items, $value ) );
 
 		echo $markup;
 
@@ -5409,11 +5412,7 @@ if ( ! function_exists( 'rgget' ) ) {
 			$array = $_GET;
 		}
 
-		if ( isset( $array[ $name ] ) ) {
-			return $array[ $name ];
-		}
-
-		return '';
+		return rgar( $array, $name, '' );
 	}
 }
 

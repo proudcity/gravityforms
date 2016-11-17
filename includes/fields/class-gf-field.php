@@ -103,12 +103,27 @@ class GF_Field extends stdClass implements ArrayAccess {
 	}
 
 	public function __set( $key, $value ) {
-		$this->$key = $value;
+		switch( $key ) {
+			// intercept 3rd parties trying to set the adminOnly property and convert to visibility property
+			case 'adminOnly':
+				$this->visibility = $value ? 'administrative' : 'visible';
+				break;
+			default:
+				$this->$key = $value;
+		}
 	}
 
 	public function &__get( $key ) {
-		if ( ! isset( $this->$key ) ) {
-			$this->$key = '';
+
+		switch( $key ) {
+			// intercept 3rd parties trying to get the adminOnly property and fetch visibility property instead
+			case 'adminOnly':
+				$value = $this->visibility == 'administrative'; // set and return variable to avoid notice
+				return $value;
+			default:
+				if ( ! isset( $this->$key ) ) {
+					$this->$key = '';
+				}
 		}
 
 		return $this->$key;
@@ -696,6 +711,11 @@ class GF_Field extends stdClass implements ArrayAccess {
 	}
 
 
+	public function is_administrative() {
+		return $this->visibility == 'administrative';
+	}
+
+
 	// # OTHER HELPERS --------------------------------------------------------------------------------------------------
 
 	/**
@@ -1042,8 +1062,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 			$this->inputName = wp_strip_all_tags( $this->inputName );
 		}
 
-		$this->adminOnly = (bool) $this->adminOnly;
-
+		$this->visibility = wp_strip_all_tags( $this->visibility );
 		$this->noDuplicates = (bool) $this->noDuplicates;
 
 		if ( $this->defaultValue ) {

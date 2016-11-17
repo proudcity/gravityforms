@@ -4,7 +4,7 @@
 Plugin Name: Gravity Forms Zapier Add-on
 Plugin URI: http://www.gravityforms.com
 Description: Integrates Gravity Forms with Zapier allowing form submissions to be automatically sent to your configured Zaps.
-Version: 2.0
+Version: 2.0.2
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityformszapier
@@ -36,7 +36,7 @@ class GFZapier {
 	private static $slug = 'gravityformszapier';
 	private static $path = 'gravityformszapier/zapier.php';
 	private static $url = 'http://www.gravityforms.com';
-	private static $version = '2.0';
+	private static $version = '2.0.2';
 	private static $min_gravityforms_version = '1.9.10';
 
 	private static $_current_body = null;
@@ -577,27 +577,13 @@ class GFZapier {
 			return false;
 		}
 
-		$is_entry = ! empty( $entry );
+		$is_entry   = ! empty( $entry );
+		$is_delayed = $is_entry && self::maybe_delay_feed( $entry, $form );
 
-		//see if there is a paypal feed and zapier is set to be delayed until payment is received
-		if ( $is_entry && class_exists( 'GFPayPal' ) ) {
-			$paypal_feeds = self::get_paypal_feeds( $form['id'] );
-			//loop through paypal feeds to get active one for this form submission, needed to see if add-on processing should be delayed
-			foreach ( $paypal_feeds as $paypal_feed ) {
-				if ( $paypal_feed['is_active'] && self::is_feed_condition_met( $paypal_feed, $form, $entry ) ) {
-					$active_paypal_feed = $paypal_feed;
-					break;
-				}
-			}
+		if ( $is_delayed ) {
+			self::log_debug( 'Zapier Feed processing is delayed, not processing feed for entry #' . $entry['id'] );
 
-			$is_fulfilled = rgar( $entry, 'is_fulfilled' );
-
-
-			if ( ! empty( $active_paypal_feed ) && self::is_delayed( $active_paypal_feed ) && self::has_paypal_payment( $active_paypal_feed, $form, $entry ) && ! $is_fulfilled ) {
-				self::log_debug( 'Zapier Feed processing is delayed pending payment, not processing feed for entry #' . $entry['id'] );
-
-				return false;
-			}
+			return false;
 		}
 
 		//do not send spam entries to zapier
@@ -627,6 +613,54 @@ class GFZapier {
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * Determines if feed processing is delayed by the PayPal Standard Add-On.
+	 *
+	 * Also enables use of the gform_is_delayed_pre_process_feed filter.
+	 *
+	 * @param array $entry The Entry Object currently being processed.
+	 * @param array $form The Form Object currently being processed.
+	 *
+	 * @since 2.0.2
+	 *
+	 * @return bool
+	 */
+	public static function maybe_delay_feed( $entry, $form ) {
+		$is_delayed = false;
+		$slug       = self::$slug;
+
+		// See if there is a paypal feed and zapier is set to be delayed until payment is received.
+		if ( class_exists( 'GFPayPal' ) ) {
+			$paypal_feeds = self::get_paypal_feeds( $form['id'] );
+			// Loop through paypal feeds to get active one for this form submission, needed to see if add-on processing should be delayed.
+			foreach ( $paypal_feeds as $paypal_feed ) {
+				if ( $paypal_feed['is_active'] && self::is_feed_condition_met( $paypal_feed, $form, $entry ) ) {
+					$active_paypal_feed = $paypal_feed;
+					break;
+				}
+			}
+
+			$is_fulfilled = rgar( $entry, 'is_fulfilled' );
+
+			if ( ! empty( $active_paypal_feed ) && self::is_delayed( $active_paypal_feed ) && self::has_paypal_payment( $active_paypal_feed, $form, $entry ) && ! $is_fulfilled ) {
+				$is_delayed = true;
+			}
+		}
+
+		/**
+		 * Allow feed processing to be delayed.
+		 *
+		 * @param bool $is_delayed Is feed processing delayed?
+		 * @param array $form The Form Object currently being processed.
+		 * @param array $entry The Entry Object currently being processed.
+		 * @param string $slug The Add-On slug e.g. gravityformszapier
+		 */
+		$is_delayed = apply_filters( 'gform_is_delayed_pre_process_feed', $is_delayed, $form, $entry, $slug );
+		$is_delayed = apply_filters( 'gform_is_delayed_pre_process_feed_' . $form['id'], $is_delayed, $form, $entry, $slug );
+
+		return $is_delayed;
 	}
 
 	public static function process_feed( $feed, $entry, $form ) {
@@ -1631,7 +1665,8 @@ class GFZapierTable extends WP_List_Table {
 				'url'  => __( 'Webhook URL', 'gravityformszapier' )
 			),
 			array(),
-			array()
+			array(),
+			'name',
 		);
 
 		parent::__construct();

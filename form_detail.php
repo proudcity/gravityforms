@@ -2267,17 +2267,19 @@ class GFFormDetail {
 		?>
 		<li class="visibility_setting field_setting">
 			<label for="visibility" class="section_label"><?php esc_html_e( 'Visibility', 'gravityforms' ); ?> <?php gform_tooltip( 'form_field_visibility' ) ?></label>
-
 			<div>
-				<input type="radio" name="field_visibility" id="field_visibility_everyone" size="10" onclick="return SetFieldAdminOnly(!this.checked);" onkeypress="return SetFieldAdminOnly(!this.checked);" />
-				<label for="field_visibility_everyone" class="inline">
-					<?php esc_html_e( 'Everyone', 'gravityforms' ); ?>
-				</label>
-				&nbsp;&nbsp;
-				<input type="radio" name="field_visibility" id="field_visibility_admin" size="10" onclick="return SetFieldAdminOnly(this.checked);" onkeypress="return SetFieldAdminOnly(this.checked);" />
-				<label for="field_visibility_admin" class="inline">
-					<?php esc_html_e( 'Admin Only', 'gravityforms' ); ?>
-				</label>
+				<?php foreach( GFCommon::get_visibility_options() as $visibility_option ):
+					$slug = sanitize_title_with_dashes( $visibility_option['value'] );
+
+					?>
+
+					<input type="radio" name="field_visibility" id="field_visibility_<?php echo $slug; ?>" size="10" value="<?php echo $visibility_option['value']; ?>" onclick="return SetFieldVisibility( this.value );" onkeypress="return SetFieldVisibility( this.value );" />
+					<label for="field_visibility_<?php echo $slug; ?>" class="inline">
+						<?php echo esc_html( $visibility_option['label'] ); ?>
+					</label>
+					&nbsp;&nbsp;
+				<?php endforeach; ?>
+
 			</div>
 			<br class="clear" />
 		</li>

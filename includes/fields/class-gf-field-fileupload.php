@@ -585,7 +585,18 @@ class GF_Field_FileUpload extends GF_Field {
 		$secure_download_location = apply_filters( 'gform_secure_file_download_location_' . $this->formId, $secure_download_location, $file, $this );
 
 		if ( ! $secure_download_location ) {
-			return $download_url;
+
+			/**
+			 * Allow filtering of the download URL.
+			 *
+			 * Allows for manual filtering of the download URL to handle conditions such as
+			 * unusual domain mapping and others.
+			 *
+			 * @param string              $download_url The URL from which to download the file.
+			 * @param GF_Field_FileUpload $field        The field object for further context.
+			 */
+			return apply_filters( 'gform_secure_file_download_url', $download_url, $this );
+
 		}
 
 		$upload_root = GFFormsModel::get_upload_url( $this->formId );
@@ -607,7 +618,17 @@ class GF_Field_FileUpload extends GF_Field {
 			}
 			$download_url = add_query_arg( $args, $download_url );
 		}
-		return $download_url;
+
+		/**
+		 * Allow filtering of the download URL.
+		 *
+		 * Allows for manual filtering of the download URL to handle conditions such as
+		 * unusual domain mapping and others.
+		 *
+		 * @param string              $download_url The URL from which to download the file.
+		 * @param GF_Field_FileUpload $field        The field object for further context.
+		 */
+		return apply_filters( 'gform_secure_file_download_url', $download_url, $this );
 	}
 }
 

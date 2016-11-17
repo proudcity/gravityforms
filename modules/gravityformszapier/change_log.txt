@@ -1,4 +1,12 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 2.0.2
+    - Added support for the gform_is_delayed_pre_process_feed filter.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 2.0.1
+    - Updated Zapier Feeds table to be responsive.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 2.0
     - Added the gform_zapier_sample_field_value filter for overriding the sample data sent when configuring the zap or updating the form.
     - Updated to format entry date.

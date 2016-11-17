@@ -97,6 +97,14 @@ class GF_Field_Textarea extends GF_Field {
 				'tabindex' 		=> $tabindex,
 				'media_buttons' => false,
 				'quicktags'     => false,
+				'tinymce'		=> array( 'init_instance_callback' =>  "function (editor) {
+												editor.on( 'keyup paste mouseover', function (e) {
+													var content = editor.getContent( { format: 'text' } ).trim();													
+													var textarea = jQuery( '#' + editor.id ); 
+													textarea.val( content ).trigger( 'keyup' ).trigger( 'paste' ).trigger( 'mouseover' );													
+												
+													
+												});}" ),
 			), $this, $form, $entry );
 
 			$editor_settings = apply_filters( sprintf( 'gform_rich_text_editor_options_%d', $form['id'] ),               $editor_settings, $this, $form, $entry );
@@ -129,6 +137,18 @@ class GF_Field_Textarea extends GF_Field {
 		}
 
 		return sprintf( "<div class='ginput_container ginput_container_textarea'>%s</div>", $input );
+	}
+
+	public function validate( $value, $form ) {
+		if ( ! is_numeric( $this->maxLength ) ) {
+			return;
+		}
+
+		$value = strip_tags( $value );
+		if ( GFCommon::safe_strlen( $value ) > $this->maxLength ) {
+			$this->failed_validation  = true;
+			$this->validation_message = empty( $this->errorMessage ) ? esc_html__( 'The text entered exceeds the maximum number of characters.', 'gravityforms' ) : $this->errorMessage;
+		}
 	}
 
 	public static function start_wp_tiny_mce_init_buffer() {

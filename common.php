@@ -1231,7 +1231,7 @@ class GFCommon {
 						continue;
 					}
 
-					if ( ( ! GFCommon::is_section_empty( $field, $form, $lead ) || $display_empty ) && ! $field->adminOnly ) {
+					if ( ( ! GFCommon::is_section_empty( $field, $form, $lead ) || $display_empty ) && ! $field->is_administrative() ) {
 
 						switch ( $format ) {
 							case 'text' :
@@ -1278,7 +1278,7 @@ class GFCommon {
 
 					$display_field = true;
 					//depending on parameters, don't display adminOnly or hidden fields
-					if ( $no_admin && $field->adminOnly ) {
+					if ( $no_admin && $field->is_administrative() ) {
 						$display_field = false;
 					} else if ( $no_hidden && RGFormsModel::get_input_type( $field ) == 'hidden' ) {
 						$display_field = false;
@@ -1352,12 +1352,12 @@ class GFCommon {
 					$field_data = "--------------------------------\n" . $order_label . "\n\n";
 					foreach ( $products['products'] as $product ) {
 						$product_name = $product['quantity'] . ' ' . $product['name'];
-						$price        = self::to_number( $product['price'] );
+						$price        = self::to_number( $product['price'], $lead['currency'] );
 						if ( ! empty( $product['options'] ) ) {
 							$product_name .= ' (';
 							$options = array();
 							foreach ( $product['options'] as $option ) {
-								$price += self::to_number( $option['price'] );
+								$price += self::to_number( $option['price'], $lead['currency'] );
 								$options[] = $option['option_name'];
 							}
 							$product_name .= implode( ', ', $options ) . ')';
@@ -1437,10 +1437,10 @@ class GFCommon {
                                                             <strong style="color:#BF461E; font-size:12px; margin-bottom:5px">' . $product['name'] . '</strong>
                                                             <ul style="margin:0">';
 
-						$price = self::to_number( $product['price'] );
+						$price = self::to_number( $product['price'], $lead['currency'] );
 						if ( is_array( rgar( $product, 'options' ) ) ) {
 							foreach ( $product['options'] as $option ) {
-								$price += self::to_number( $option['price'] );
+								$price += self::to_number( $option['price'], $lead['currency'] );
 								$field_data .= '<li style="padding:4px 0 4px 0">' . $option['option_label'] . '</li>';
 							}
 						}
@@ -1520,6 +1520,15 @@ class GFCommon {
 		$message_format = gf_apply_filters( array( 'gform_notification_format', $form_id ), 'html', 'user', $form, $lead );
 		$message        = GFCommon::replace_variables( rgget( 'message', $form['autoResponder'] ), $form, $lead, false, false, ! rgget( 'disableAutoformat', $form['autoResponder'] ), $message_format );
 
+		/**
+		 * Allows the disabling of the notification message defined in the shortcode.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param bool  true  If the notification message shortcode should be used.
+		 * @param array $form The Form Object.
+		 * @param array $lead The Entry Object.
+		 */
 		if ( apply_filters( 'gform_enable_shortcode_notification_message', true, $form, $lead ) ) {
 			$message = do_shortcode( $message );
 		}
@@ -1555,6 +1564,7 @@ class GFCommon {
 		$message_format = gf_apply_filters( array( 'gform_notification_format', $form_id ), 'html', 'admin', $form, $lead );
 		$message        = GFCommon::replace_variables( rgget( 'message', $form['notification'] ), $form, $lead, false, false, ! rgget( 'disableAutoformat', $form['notification'] ), $message_format );
 
+		/** @see common.php:1483 */
 		if ( apply_filters( 'gform_enable_shortcode_notification_message', true, $form, $lead ) ) {
 			$message = do_shortcode( $message );
 		}
@@ -1672,6 +1682,7 @@ class GFCommon {
 		$message_format = rgempty( 'message_format', $notification ) ? 'html' : rgar( $notification, 'message_format' );
 		$message        = GFCommon::replace_variables( rgar( $notification, 'message' ), $form, $lead, false, false, ! rgar( $notification, 'disableAutoformat' ), $message_format, $data );
 
+		/** @see common.php:1483 */
 		if ( apply_filters( 'gform_enable_shortcode_notification_message', true, $form, $lead ) ) {
 			$message = do_shortcode( $message );
 		}
@@ -2161,9 +2172,11 @@ class GFCommon {
 		$inactive_count = $form_counts['inactive'];
 		$fc             = abs( $active_count ) + abs( $inactive_count );
 		$entry_count    = GFFormsModel::get_lead_count_all_forms( 'active' );
+		$meta_counts	= GFFormsModel::get_entry_meta_counts();
 		$im             = is_multisite();
+		$lang 			= get_locale();
 
-		$post = array( 'of' => 'gravityforms', 'key' => self::get_key(), 'v' => self::$version, 'wp' => get_bloginfo( 'version' ), 'php' => phpversion(), 'mysql' => $wpdb->db_version(), 'version' => '2', 'plugins' => $plugins, 'tn' => $theme_name, 'tu' => $theme_uri, 'tv' => $theme_version, 'ta' => $theme_author, 'tau' => $theme_author_uri, 'im' => $im, 'fc' => $fc, 'ec' => $entry_count, 'emc' => self::get_emails_sent(), 'api' => self::get_api_calls() );
+		$post = array( 'of' => 'gravityforms', 'key' => self::get_key(), 'v' => self::$version, 'wp' => get_bloginfo( 'version' ), 'php' => phpversion(), 'mysql' => $wpdb->db_version(), 'version' => '2', 'plugins' => $plugins, 'tn' => $theme_name, 'tu' => $theme_uri, 'tv' => $theme_version, 'ta' => $theme_author, 'tau' => $theme_author_uri, 'im' => $im, 'fc' => $fc, 'ec' => $entry_count, 'emc' => self::get_emails_sent(), 'api' => self::get_api_calls(), 'emeta' => $meta_counts['meta'], 'ed' => $meta_counts['details'], 'en' => $meta_counts['notes'], 'lang' => $lang );
 
 		return $post;
 	}
@@ -3097,7 +3110,7 @@ class GFCommon {
 					$shipping_name = $shipping_field[0]['label'] . " ($shipping_method)";
 				}
 			}
-			$shipping_price = self::to_number( $shipping_price );
+			$shipping_price = self::to_number( $shipping_price, $lead['currency'] );
 
 			$product_info = array( 'products' => $products, 'shipping' => array( 'id' => $shipping_field_id, 'name' => $shipping_name, 'price' => $shipping_price ) );
 
@@ -3870,18 +3883,24 @@ class GFCommon {
 		$gf_vars['otherChoiceValue']     = GFCommon::get_other_choice_value();
 		$gf_vars['isFormTrash']          = false;
 		$gf_vars['currentlyAddingField'] = false;
+		$gf_vars['visibilityOptions']    = GFCommon::get_visibility_options();
 
 		$gf_vars['addFieldFilter']    = esc_html__( 'Add a condition' , 'gravityforms' );
 		$gf_vars['removeFieldFilter'] = esc_html__( 'Remove a condition' , 'gravityforms' );
 		$gf_vars['filterAndAny']      = esc_html__( 'Include results if {0} match:' , 'gravityforms' );
 
 		$gf_vars['customChoices']     = esc_html__( 'Custom Choices', 'gravityforms' );
-		$gf_vars['predefinedChoices'] = esc_html__( 'Predefined Choices', 'gravityforms' );
 
 
 		if ( is_admin() && rgget( 'id' ) ) {
+
 			$form                 = RGFormsModel::get_form_meta( rgget( 'id' ) );
 			$gf_vars['mergeTags'] = GFCommon::get_merge_tags( $form['fields'], '', false );
+
+			$address_field                 = new GF_Field_Address();
+			$gf_vars['addressTypes']       = $address_field->get_address_types( $form['id'] );
+			$gf_vars['defaultAddressType'] = $address_field->get_default_address_type( $form['id'] );
+
 		}
 
 		$gf_vars_json = 'var gf_vars = ' . json_encode( $gf_vars ) . ';';
@@ -4728,8 +4747,11 @@ class GFCommon {
 		$i          = $match[0][0] == '{' ? 4 : 5;
 		$modifier   = strtolower( rgar( $match, $i ) );
 		$modifiers  = array_map( 'trim', explode( ',', $modifier ) );
-		$url_encode = ! $url_encode && in_array( 'urlencode', $modifiers );
 		$field->set_modifiers( $modifiers );
+
+		if( in_array( 'urlencode', $modifiers ) ) {
+			$url_encode = true;
+		}
 
 		$value = $field->get_value_merge_tag( $value, $input_id, $lead, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br );
 
@@ -4861,6 +4883,57 @@ class GFCommon {
 
 		return $hash;
 	}
+
+	public static function get_visibility_options() {
+
+		$options = array(
+			array(
+				'label'       => __( 'Visible', 'gravityforms' ),
+				'value'       => 'visible',
+				'description' => __( 'Default option. The field is visible when viewing the form.', 'gravityforms' )
+			),
+			array(
+				'label'       => __( 'Hidden', 'gravityforms' ),
+				'value'       => 'hidden',
+				'description' => __( 'The field is hidden when viewing the form. Useful when you require the functionality of this field but do not want the user to be able to see this field.', 'gravityforms' )
+			),
+			array(
+				'label'       => __( 'Administrative', 'gravityforms' ),
+				'value'       => 'administrative',
+				'description' => __( 'The field is only visible when administrating submitted entries. The field is not visible or functional when viewing the form.', 'gravityforms' )
+			),
+		);
+
+		/**
+		 * Allows default visibility options to be modified or removed and custom visibility options to be added.
+		 *
+		 * @since 2.1
+		 *
+		 * @param array $options {
+		 *     An array of visibility options.
+		 *
+		 *     @type string $label       The label of the visibility option; displayed in the field's Visibility setting.
+		 *     @type string $value       The value of the visibility option; will be saved to the form meta.
+		 *     @type string $description The description of the visibility option; used in the Visibility setting tooltip.
+		 * }
+		 */
+		return (array) apply_filters( 'gform_visibility_options', $options );
+	}
+
+	public static function get_visibility_tooltip() {
+
+		$options = self::get_visibility_options();
+		$markup  = array();
+
+		foreach( $options as $option ) {
+			$markup[] = sprintf( '<b>%s</b><br>%s', $option['label'], $option['description'] );
+		}
+
+		$markup = sprintf( '<ul><li>%s</li></ul>', implode( '</li><li>', $markup ) );
+
+		return sprintf( '<h6>%s</h6> %s<br><br>%s', __( 'Visibility', 'gravityforms' ), __( 'Select the visibility for this field.', 'gravityforms' ), $markup );
+	}
+
 }
 
 class GFCategoryWalker extends Walker {

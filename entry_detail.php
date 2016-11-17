@@ -27,8 +27,15 @@ class GFEntryDetail {
 	 */
 	private static $_total_count = 0;
 
+	/**
+	 * Prepare meta boxes and screen options.
+	 */
 	public static function add_meta_boxes() {
-		// Prepare meta boxes and screen options.
+
+		$entry = self::get_current_entry();
+		if ( is_wp_error( $entry ) ) {
+			return;
+		}
 
 		$meta_boxes = array(
 			'submitdiv'     => array(
@@ -51,9 +58,6 @@ class GFEntryDetail {
 			);
 		}
 
-		$entry = self::get_current_entry();
-		$form  = self::get_current_form();
-
 		if ( ! empty( $entry['payment_status'] ) ) {
 			$meta_boxes['payment'] = array(
 				'title'    => $entry['transaction_type'] == 2 ? esc_html__( 'Subscription Details', 'gravityforms' ) : esc_html__( 'Payment Details', 'gravityforms' ),
@@ -61,6 +65,8 @@ class GFEntryDetail {
 				'context'  => 'side',
 			);
 		}
+
+		$form = self::get_current_form();
 
 		/**
 		 * Allow custom meta boxes to be added to the entry detail page.
@@ -992,12 +998,12 @@ class GFEntryDetail {
 											<div class="product_name"><?php echo esc_html( $product['name'] ); ?></div>
 											<ul class="product_options">
 												<?php
-												$price = GFCommon::to_number( $product['price'] );
+												$price = GFCommon::to_number( $product['price'], $lead['currency'] );
 												if ( is_array( rgar( $product, 'options' ) ) ) {
 													$count = sizeof( $product['options'] );
 													$index = 1;
 													foreach ( $product['options'] as $option ) {
-														$price += GFCommon::to_number( $option['price'] );
+														$price += GFCommon::to_number( $option['price'], $lead['currency'] );
 														$class = $index == $count ? " class='lastitem'" : '';
 														$index ++;
 														?>

@@ -745,10 +745,18 @@ class GFFormsModel {
 		$page_number = 1;
 		if ( is_array( rgar( $form, 'fields' ) ) ) {
 			foreach ( $form['fields'] as &$field ) {
+
+				// convert adminOnly property to visibility
+				if( ! isset( $field['visibility'] ) ) {
+					$field['visibility'] = isset( $field['adminOnly'] ) && $field['adminOnly'] ? 'administrative' : 'visible';
+					unset( $field['adminOnly'] );
+				}
+
 				$field = GF_Fields::create( $field );
 				if ( isset( $form['id'] ) ) {
 					$field->formId = $form['id'];
 				}
+
 				$field->pageNumber = $page_number;
 				if ( $field->type == 'page' ) {
 					$page_number ++;
@@ -986,7 +994,7 @@ class GFFormsModel {
 
 		if ( is_array( rgar( $form, 'fields' ) ) ) {
 			$all_fields = array(
-				'adminLabel'        => '', 'adminOnly' => '', 'allowsPrepopulate' => '', 'defaultValue' => '', 'description' => '', 'content' => '', 'cssClass' => '',
+				'adminLabel'        => '', 'allowsPrepopulate' => '', 'defaultValue' => '', 'description' => '', 'content' => '', 'cssClass' => '',
 				'errorMessage'      => '', 'id' => '', 'inputName' => '', 'isRequired' => '', 'label' => '', 'noDuplicates' => '',
 				'size'              => '', 'type' => '', 'postCustomFieldName' => '', 'displayAllCategories' => '', 'displayCaption' => '', 'displayDescription' => '',
 				'displayTitle'      => '', 'inputType' => '', 'rangeMin' => '', 'rangeMax' => '', 'calendarIconType' => '',
@@ -994,6 +1002,7 @@ class GFFormsModel {
 				'defaultState'      => '', 'hideAddress2' => '', 'hideCountry' => '', 'hideState' => '', 'inputs' => '', 'nameFormat' => '', 'allowedExtensions' => '',
 				'captchaType'       => '', 'pageNumber' => '', 'captchaTheme' => '', 'simpleCaptchaSize' => '', 'simpleCaptchaFontColor' => '', 'simpleCaptchaBackgroundColor' => '',
 				'failed_validation' => '', 'productField' => '', 'enablePasswordInput' => '', 'maxLength' => '', 'enablePrice' => '', 'basePrice' => '',
+				'visibility'        => 'visible'
 			);
 
 			foreach ( $form['fields'] as &$field ) {
@@ -1653,14 +1662,14 @@ class GFFormsModel {
 			return;
 		}
 
-		$file_path = self::get_phsyical_file_path( $url );
+		$file_path = self::get_physical_file_path( $url );
 
 		if ( file_exists( $file_path ) ) {
 			unlink( $file_path );
 		}
 	}
 
-	public static function get_phsyical_file_path( $url ) {
+	public static function get_physical_file_path( $url ) {
 
 		// convert from url to physical path
 		if ( is_multisite() && get_site_option( 'ms_files_rewriting' ) ) {
@@ -2141,7 +2150,7 @@ class GFFormsModel {
 		$is_entry_detail = GFCommon::is_entry_detail();
 		$is_admin = $is_form_editor || $is_entry_detail;
 
-		if ( empty( $value ) && $field->adminOnly && ! $is_admin ) {
+		if ( empty( $value ) && $field->is_administrative() && ! $is_admin ) {
 			$value = self::get_default_value( $field, $input_id );
 		}
 
@@ -2302,13 +2311,17 @@ class GFFormsModel {
 
 		$is_match = false;
 
-		if ( $source_field && is_subclass_of( $source_field, 'GF_Field' ) && $source_field->type == 'post_category' ) {
-			$field_value = GFCommon::prepare_post_category_value( $field_value, $source_field, 'conditional_logic' );
+		if ( $source_field && is_subclass_of( $source_field, 'GF_Field' ) ) {
+			if ( $source_field->type == 'post_category' ) {
+				$field_value = GFCommon::prepare_post_category_value( $field_value, $source_field, 'conditional_logic' );
+			} elseif ( $source_field->type == 'multiselect' && ! empty( $field_value ) && ! is_array( $field_value ) ) {
+				// Convert the comma-delimited string into an array.
+				$field_value = explode( ',', $field_value );
+			} elseif ( $source_field->get_input_type() != 'checkbox' && is_array( $field_value ) && $source_field->id != $rule['fieldId'] && is_array( $source_field->get_entry_inputs() ) ) {
+				// Get the specific input value from the full field value.
+				$field_value = rgar( $field_value, $rule['fieldId'] );
+			}
 		}
-
-		if ( ! empty( $field_value ) && ! is_array( $field_value ) && is_subclass_of( $source_field, 'GF_Field' ) && $source_field->type == 'multiselect' ) {
-			$field_value = explode( ',', $field_value );
-		} // convert the comma-delimited string into an array
 
 		$form_id = $source_field instanceof GF_Field ? $source_field->formId : 0;
 
@@ -2316,15 +2329,15 @@ class GFFormsModel {
 
 
 		if ( is_array( $field_value ) ) {
-			$field_value = array_values( $field_value ); //returning array values, ignoring keys if array is associative
+			$field_value = array_values( $field_value ); // Returning array values, ignoring keys if array is associative.
 			$match_count = 0;
 			foreach ( $field_value as $val ) {
-				$val = GFFormsModel::maybe_trim_input( GFCommon::get_selection_value( $val ), rgar( $source_field, 'formId' ), $source_field );
+				$val = GFFormsModel::maybe_trim_input( GFCommon::get_selection_value( $val ), $form_id, $source_field );
 				if ( self::matches_operation( $val, $target_value, $operation ) ) {
 					$match_count ++;
 				}
 			}
-			// if operation is Is Not, none of the values in the array can match the target value.
+			// If operation is Is Not, none of the values in the array can match the target value.
 			$is_match = $operation == 'isnot' ? $match_count == count( $field_value ) : $match_count > 0;
 		} else if ( self::matches_operation( GFFormsModel::maybe_trim_input( GFCommon::get_selection_value( $field_value ), $form_id, $source_field ), $target_value, $operation ) ) {
 			$is_match = true;
@@ -2508,6 +2521,13 @@ class GFFormsModel {
 	public static function purge_expired_incomplete_submissions( $expiration_days = 30 ) {
 		global $wpdb;
 
+		/**
+		 * Overrides the number of days until incomplete submissions are purged.
+		 *
+		 * @since 1.9
+		 *
+		 * @param int $expiration_days The number of days until expiration. Defaults to 30.
+		 */
 		$expiration_days = apply_filters( 'gform_incomplete_submissions_expiration_days', $expiration_days );
 
 		$expiration_date = gmdate( 'Y-m-d H:i:s', time() - ( $expiration_days * 24 * 60 * 60 ) );
@@ -3620,7 +3640,7 @@ class GFFormsModel {
 		$is_entry_detail = GFCommon::is_entry_detail();
 		$is_admin = $is_form_editor || $is_entry_detail;
 
-		if ( empty( $value ) && $field->adminOnly && ! $is_admin ) {
+		if ( empty( $value ) && $field->is_administrative() && ! $is_admin ) {
 			$value = self::get_default_value( $field, $input_id );
 		}
 
@@ -4820,6 +4840,7 @@ class GFFormsModel {
 		return $leads;
 	}
 
+
 	public static function search_lead_ids( $form_id, $search_criteria = array() ) {
 		global $wpdb;
 
@@ -4936,7 +4957,7 @@ class GFFormsModel {
 		if ( false === empty( $entry_meta ) && array_key_exists( $sort_field, $entry_meta ) ) {
 			$entry_meta_sql_join      = $wpdb->prepare(
 				"
-                INNER JOIN
+                LEFT JOIN
                 (
                 SELECT
                      lead_id, meta_value as $sort_field
@@ -5093,11 +5114,12 @@ class GFFormsModel {
 			if ( 'entry_id' === $key ) {
 				$key = 'id';
 			}
+
 			if ( in_array( $key, $info_column_keys ) ) {
 				continue;
 			}
 
-			$val      = rgar( $search, 'value' );
+			$val = rgar( $search, 'value' );
 
 			$operator = self::is_valid_operator( rgar( $search, 'operator' ) ) ? strtolower( $search['operator'] ) : '=';
 
@@ -5149,7 +5171,7 @@ class GFFormsModel {
 						$search_term = ''; // Set to blank, still gets passed to wpdb::prepare below but isn't used
 					}
 
-					$upper_field_number_limit = (string) (int) $key === $key ? (float) $key + 0.9999 : (float) $key + 0.0001;
+					$upper_field_number_limit = (string) (int) $key === (string) $key ? (float) $key + 0.9999 : (float) $key + 0.0001;
 					/* doesn't support "<>" for checkboxes */
 					$field_query = $wpdb->prepare(
 						"
@@ -5441,6 +5463,30 @@ class GFFormsModel {
 								WHERE status=%s", $status );
 
 		return $wpdb->get_var( $sql );
+	}
+
+	public static function get_entry_meta_counts() {
+		global $wpdb;
+
+		$detail_table_name = self::get_lead_details_table_name();
+		$meta_table_name = self::get_lead_meta_table_name();
+		$notes_table_name = self::get_lead_notes_table_name();
+
+		$results = $wpdb->get_results(
+			"
+            SELECT
+            (SELECT count(0) FROM $detail_table_name) as details,
+            (SELECT count(0) FROM $meta_table_name) as meta,
+            (SELECT count(0) FROM $notes_table_name) as notes
+            "
+		);
+
+		return array(
+			'details' => intval( $results[0]->details ),
+			'meta'    => intval( $results[0]->meta ),
+			'notes'   => intval( $results[0]->notes ),
+		);
+
 	}
 
 	public static function dbDelta( $sql ) {
@@ -5847,8 +5893,30 @@ class GFFormsModel {
 		return $fields;
 	}
 
+	/**
+	 * Checks whether the conditional logic operator passed in is valid.
+	 *
+	 * @since  2.0.7.20 Refactored and added filter gform_is_valid_conditional_logic_operator.
+	 * @access public
+	 *
+	 * @param string $operator Conditional logic operator.
+	 *
+	 * @return bool true if a valid operator, false if not.
+	 */
 	public static function is_valid_operator( $operator ) {
-		return in_array( strtolower( $operator ) , array( 'is', 'isnot', '<>', 'not in', 'in', '>', '<', 'contains', 'starts_with', 'ends_with', 'like', '>=', '<=' ) );
+		$operators = array( 'is', 'isnot', '<>', 'not in', 'in', '>', '<', 'contains', 'starts_with', 'ends_with', 'like', '>=', '<=' );
+		$is_valid = in_array( strtolower( $operator ), $operators );
+		/**
+		 * Filter which checks whether the operator is valid.
+		 *
+		 * Allows custom operators to be validated.
+		 *
+		 * @since 2.0.7.20
+		 *
+		 * @param bool   $is_valid Whether the operator is valid or not.
+		 * @param string $operator The conditional logic operator.
+		 */
+		return apply_filters( 'gform_is_valid_conditional_logic_operator', $is_valid, $operator );
 	}
 
 	/**

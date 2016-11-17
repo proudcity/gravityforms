@@ -900,4 +900,117 @@ class GFSettings {
 		return $akismet_setting;
 	}
 
+
+	/**
+	 * Handles the registration of a new site when a new license key is entered
+	 *
+	 * @access public
+	 * @static
+	 * @see GFForms::include_gravity_api
+	 * @see gapi()
+	 * @see Gravity_Api::register_current_site
+	 *
+	 * @param string $value     The new key after edits
+	 * @param string $old_value The previous key
+	 *
+	 * @return string $value The new key
+	 */
+	public static function action_add_option_rg_gforms_key( $option, $value ){
+
+		self::update_site_registration( '', $value );
+
+	}
+
+	/**
+	 * Handles updates to the Gravity Forms license key
+	 *
+	 * @access public
+	 * @static
+	 * @see GFForms::include_gravity_api
+	 * @see gapi()
+	 * @see Gravity_Api::update_current_site
+	 *
+	 * @param string $value     The new key after edits
+	 * @param string $old_value The previous key
+	 *
+	 * @return string $value The new key
+	 */
+	public static function action_update_option_rg_gforms_key( $old_value, $value ){
+
+		self::update_site_registration( $old_value, $value );
+
+	}
+
+	/**
+	 * Handles the deletion of the Gravity Forms key by de-registering the site
+	 *
+	 * @access public
+	 * @static
+	 * @see GFForms::include_gravity_api
+	 * @see gapi()
+	 * @see Gravity_Api::deregister_current_site
+	 */
+	public static function action_delete_option_rg_gforms_key() {
+
+
+		GFForms::include_gravity_api();
+
+		if ( gapi()->is_site_registered() ) {
+
+			gapi()->deregister_current_site();
+		}
+	}
+
+
+	private static function update_site_registration( $previous_key_md5, $new_key_md5 ){
+
+		GFForms::include_gravity_api();
+
+		$result = null;
+
+		if ( empty( $new_key_md5 ) ) {
+
+			//De-registering site when key is removed
+			$result = gapi()->deregister_current_site();
+
+		}
+		else if ( $previous_key_md5 != $new_key_md5 ) {
+
+			//Key has changed, update site record appropriately.
+
+			//Get new key information
+			$version_info = GFCommon::get_version_info( false );
+
+			//Has site been already registered?
+			$is_site_registered = gapi()->is_site_registered();
+
+			$is_valid_new 			= $version_info['is_valid_key'] && !$is_site_registered;
+			$is_valid_registered 	= $version_info['is_valid_key'] && $is_site_registered;
+			$is_invalid				= !$version_info['is_valid_key'] && $is_site_registered;
+
+			if ( $is_valid_new ) {
+				//Site is new (not registered) and license key is valid
+				//Register new site
+				$result = gapi()->register_current_site( $new_key_md5, true );
+			}
+			else if ( $is_valid_registered ) {
+
+				//Site is already registered and new license key is valid
+				//Update site with new key
+				$result = gapi()->update_current_site( $new_key_md5 );
+			}
+
+			else if ( $is_invalid ){
+
+				//invalid key, deregister site
+				$result = gapi()->deregister_current_site();
+			}
+
+		}
+
+		if ( is_wp_error( $result ) ){
+			GFCommon::log_error( 'Failed to update site registration with Gravity Manager. ' . print_r( $result, true ) );
+		}
+
+	}
 }
