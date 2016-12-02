@@ -1,4 +1,76 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.17
+    - Fixed an issue with the processing of custom fields during post creation which prevented the content template being processed.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.16
+	- Fixed an issue with number formatting on calculated fields.
+	- Fixed an issue on number range setting defaulting to 'false'.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.15
+	- Fixed an issue with form import process where the edit form link in incorrect.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.14
+	- Fixed an issue with currency formatting.
+    - Fixed an issue where the version info may not get cached on some systems resulting in very slow loading of the admin pages.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.13
+    - Fixed an issue with the Notifications meta box on the entry detail page when the user doesn't have the gravityforms_edit_entry_notes capability.
+    - Fixed an issue with the forms sent to the gform_forms_post_import filter after import.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.12
+    - Updated the product field types array used by GFCommon::is_product_field() to include the hiddenproduct, singleproduct, and singleshipping input types. Credit: Naomi C. Bush.
+    - Fixed an issue where GFFormDisplay::has_price_field() could incorrectly return false for some form configurations.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.11
+    - Added $entry as a fourth parameter for the gform_merge_tag_data filter.
+    - Added support for auxiliary data for confirmations.
+    - Added GFFormDisplay::get_confirmation_message() method; refactored from GFFormDisplay::handle_confirmation().
+    - Fixed issue where gfAjaxSpinner() did not link to a valid default spinner graphic.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.10
+    - Fixed a JS error in the form editor when deleting a field on a form added via the GFAPI where the form button properties have not been defined.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.9
+    - updated font size definitions to em (relative font size) in favor of rem (root font size)
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.8
+    - Fixed an issue with the submission time evaluation of conditional logic based on the multiselect type field.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.7
+    - Added logging statements.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.6
+    - Added the $field parameter to the gform_other_choice_value filter.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.5
+    - Fixed rgget helper function returning null when the value is 0.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.4
+    - Fixed the send email form on the save and continue confirmation which occasionally would not submit when AJAX is enabled.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.3
+    - Fixed entry filter from disappearing when no search results are found.
+    - Fixed entry filter not correctly populating search drop down when starred is set to no.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.2
+    - Added gform_subscription_cancelled action.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.1.1.1
     - Added the gform_secure_file_download_url filter for overriding the url returned when the file upload field value is output in the entries area and merge tags. Credit: Chris Wiegman.
     - Updated English translations (NZ, ZA). Credit: Ross McKay.

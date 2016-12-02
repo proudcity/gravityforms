@@ -113,7 +113,7 @@ class GFExport {
 			$form_ids = array();
 		} else {
 			foreach ( $form_ids as $key => $form_id ) {
-				$forms[ $key ]['id'] = $form_id;
+				$forms[ $key ] = GFAPI::get_form( $form_id );
 			}
 			/**
 			 * Fires after forms have been imported.

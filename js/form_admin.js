@@ -515,8 +515,8 @@ function TruncateRuleText(text){
 
 function gfAjaxSpinner(elem, imageSrc, inlineStyles) {
 
-    var imageSrc = typeof imageSrc == 'undefined' ? '/images/ajax-loader.gif': imageSrc;
-    var inlineStyles = typeof inlineStyles != 'undefined' ? inlineStyles : '';
+    imageSrc     = typeof imageSrc == 'undefined' || ! imageSrc ? gf_vars.baseUrl + '/images/spinner.gif': imageSrc;
+    inlineStyles = typeof inlineStyles != 'undefined' ? inlineStyles : '';
 
     this.elem = elem;
     this.image = '<img class="gfspinner" src="' + imageSrc + '" style="' + inlineStyles + '" />';

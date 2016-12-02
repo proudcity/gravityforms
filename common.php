@@ -881,7 +881,7 @@ class GFCommon {
 		 *
 		 * @see https://www.gravityhelp.com/documentation/article/gform_merge_tag_data/
 		 */
-		$data = apply_filters( 'gform_merge_tag_data', $data, $text, $form );
+		$data = apply_filters( 'gform_merge_tag_data', $data, $text, $form, $lead );
 
 		$lead = $data['entry'];
 
@@ -2007,7 +2007,7 @@ class GFCommon {
 	}
 
 	public static function is_product_field( $field_type ) {
-		$product_fields = apply_filters( 'gform_product_field_types', array( 'option', 'quantity', 'product', 'total', 'shipping', 'calculation', 'price' ) );
+		$product_fields = apply_filters( 'gform_product_field_types', array( 'option', 'quantity', 'product', 'total', 'shipping', 'calculation', 'price', 'hiddenproduct', 'singleproduct', 'singleshipping' ) );
 		return in_array( $field_type, $product_fields );
 	}
 
@@ -2092,18 +2092,23 @@ class GFCommon {
 
 	public static function get_version_info( $cache = true ) {
 
-		$raw_response = get_transient( 'gform_update_info' );
+		$version_info = get_transient( 'gform_update_info' );
 		if ( ! $cache ) {
-			$raw_response = null;
+			$version_info = null;
 		}
 
-		if ( ! $raw_response ) {
+		if ( isset( $version_info['headers'] ) ) {
+			// Legacy ( < 2.1.1.14 ) version info contained the whole raw response.
+			$version_info = null;
+		}
+
+		if ( ! $version_info ) {
 			//Getting version number
 			$options            = array( 'method' => 'POST', 'timeout' => 20 );
 			$options['headers'] = array(
 				'Content-Type' => 'application/x-www-form-urlencoded; charset=' . get_option( 'blog_charset' ),
 				'User-Agent'   => 'WordPress/' . get_bloginfo( 'version' ),
-				'Referer'      => get_bloginfo( 'url' )
+				'Referer'      => get_bloginfo( 'url' ),
 			);
 			$options['body']    = self::get_remote_post_params();
 			$options['timeout'] = 15;
@@ -2112,19 +2117,18 @@ class GFCommon {
 
 			$raw_response = self::post_to_manager( 'version.php', $nocache, $options );
 
-			//caching responses.
-			set_transient( 'gform_update_info', $raw_response, 86400 ); //caching for 24 hours
-		}
+			if ( is_wp_error( $raw_response ) || rgars( $raw_response, 'response/code' ) != 200 ) {
 
-		if ( is_wp_error( $raw_response ) || rgars( $raw_response, 'response/code' ) != 200 ) {
+				$version_info = array( 'is_valid_key' => '1', 'version' => '', 'url' => '', 'is_error' => '1' );
+			} else {
+				$version_info = json_decode( $raw_response['body'], true );
+				if ( empty( $version_info ) ) {
+					$version_info = array( 'is_valid_key' => '1', 'version' => '', 'url' => '', 'is_error' => '1' );
+				}
+			}
 
-			return array( 'is_valid_key' => '1', 'version' => '', 'url' => '', 'is_error' => '1' );
-		}
-
-		$version_info = json_decode( $raw_response['body'], true );
-
-		if ( empty( $version_info ) ) {
-			return array( 'is_valid_key' => '1', 'version' => '', 'url' => '', 'is_error' => '1' );
+			// Caching response.
+			set_transient( 'gform_update_info', $version_info, 86400 ); //caching for 24 hours
 		}
 
 		return $version_info;
@@ -3296,10 +3300,28 @@ class GFCommon {
 		return $value;
 	}
 
-	public static function get_other_choice_value() {
-		$value = apply_filters( 'gform_other_choice_value', esc_html__( 'Other' , 'gravityforms' ) );
+	/**
+	 * Get the placeholder to use for the radio button field other choice.
+	 *
+	 * @param null|GF_Field_Radio $field Null or the Field currently being prepared for display or being validated.
+	 *
+	 * @return string
+	 */
+	public static function get_other_choice_value( $field = null ) {
+		$placeholder = esc_html__( 'Other', 'gravityforms' );
 
-		return $value;
+		/**
+		 * Filter the default placeholder for the radio button field other choice.
+		 *
+		 * @since 2.1.1.6 Added the $field parameter.
+		 * @since Unknown
+		 *
+		 * @param string              $placeholder The placeholder to be filtered. Defaults to "Other".
+		 * @param null|GF_Field_Radio $field       Null or the Field currently being prepared for display or being validated.
+		 */
+		$placeholder = apply_filters( 'gform_other_choice_value', $placeholder, $field );
+
+		return $placeholder;
 	}
 
 	public static function get_browser_class() {

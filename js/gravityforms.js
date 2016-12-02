@@ -26,18 +26,37 @@ function Currency(currency){
     this.currency = currency;
 
     this.toNumber = function(text){
-        if(this.isNumeric(text))
-            return parseFloat(text);
+
+        if(this.isNumeric(text)) {
+			return parseFloat(text);
+		}
 
         return gformCleanNumber(text, this.currency["symbol_right"], this.currency["symbol_left"], this.currency["decimal_separator"]);
     };
 
-    this.toMoney = function(number){
-        if(!this.isNumeric(number))
-            number = this.toNumber(number);
+	/**
+	 * Attempts to clean the specified number and formats it as currency.
+	 *
+	 * @since 2.1.1.16 Allow the overriding of numerical checks.
+	 *
+	 * @param number    int  Number to be formatted. It can be a clean number, or an already formatted number.
+	 * @param isNumeric bool Whether or not the number is guaranteed to be a clean, unformatted number.
+	 *                       When false the function will attempt to clean the number. Defaults to false.
+	 *
+	 * @return string A number formatted as currency.
+	 */
+	this.toMoney = function(number, isNumeric){
 
-        if(number === false)
-            return "";
+		isNumeric = isNumeric || false; //isNumeric is an optional parameter. Defaults to false
+
+		if( ! isNumeric ) {
+			//Cleaning number, removing all formatting
+			number = gformCleanNumber(number, this.currency["symbol_right"], this.currency["symbol_left"], this.currency["decimal_separator"]);
+		}
+
+		if(number === false) {
+			return "";
+		}
 
         number = number + "";
         negative = "";
@@ -45,7 +64,7 @@ function Currency(currency){
 
             number = parseFloat(number.substr(1));
 			negative = '-';
-        }
+		}
 
         money = this.numberFormat(number, this.currency["decimals"], this.currency["decimal_separator"], this.currency["thousand_separator"]);
 
@@ -61,8 +80,23 @@ function Currency(currency){
 		return money;
     };
 
+
+	/**
+	 * Formats a number given the specified parameters.
+	 *
+	 * @since Unknown
+	 *
+	 * @param number        int    Number to be formatted. Must be a clean, unformatted  format.
+	 * @param decimals      int    Number of decimals that the output should contain.
+	 * @param dec_point     string Character to use as the decimal separator. Defaults to ".".
+	 * @param thousands_sep string Character to use as the thousand separator. Defaults to ",".
+	 * @param padded        bool   Pads output with zeroes if the number is exact. For example, 1.200.
+	 *
+	 * @return string The formatted number.
+	 */
     this.numberFormat = function(number, decimals, dec_point, thousands_sep, padded){
-        var padded = typeof padded == 'undefined';
+
+    	var padded = typeof padded == 'undefined';
         number = (number+'').replace(',', '').replace(' ', '');
         var n = !isFinite(+number) ? 0 : +number,
         prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
@@ -132,6 +166,21 @@ function Currency(currency){
     };
 }
 
+/**
+ * Gets a formatted number and returns a clean "decimal dot" number.
+ *
+ * Note: Input must be formatted according to the specified parameters (symbol_right, symbol_left, decimal_separator).
+ * @example input -> $1.20, output -> 1.2
+ *
+ * @since 2.1.1.16 Modified to support additional param in Currency.toMoney.
+ *
+ * @param text              string The currency-formatted number.
+ * @param symbol_right      string The symbol used on the right.
+ * @param symbol_left       string The symbol used on the left.
+ * @param decimal_separator string The decimal separator being used.
+ *
+ * @return float The unformatted numerical value.
+ */
 function gformCleanNumber(text, symbol_right, symbol_left, decimal_separator){
     var clean_number = '',
         float_number = '',
@@ -503,12 +552,12 @@ function gformGetBasePrice(formId, productFieldId){
     return price === false ? 0 : price;
 }
 
-function gformFormatMoney(text){
+function gformFormatMoney(text, isNumeric){
     if(!gf_global.gf_currency_config)
         return text;
 
     var currency = new Currency(gf_global.gf_currency_config);
-    return currency.toMoney(text);
+    return currency.toMoney(text, isNumeric);
 }
 
 function gformFormatPricingField(element){
@@ -938,7 +987,7 @@ var GFCalc = function(formId, formulaFields){
         }
         else if( field.hasClass( 'gfield_price' ) || numberFormat == "currency") {
 
-            result = gformFormatMoney(result ? result : 0);
+            result = gformFormatMoney(result ? result : 0, true);
         }
         else {
 

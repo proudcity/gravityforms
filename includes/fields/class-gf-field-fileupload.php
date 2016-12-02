@@ -592,6 +592,8 @@ class GF_Field_FileUpload extends GF_Field {
 			 * Allows for manual filtering of the download URL to handle conditions such as
 			 * unusual domain mapping and others.
 			 *
+			 * @since 2.1.1.1
+			 *
 			 * @param string              $download_url The URL from which to download the file.
 			 * @param GF_Field_FileUpload $field        The field object for further context.
 			 */

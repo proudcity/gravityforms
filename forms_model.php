@@ -2447,11 +2447,6 @@ class GFFormsModel {
 			$source_field = RGFormsModel::get_field( $form, $rule['fieldId'] );
 			$field_value  = empty( $lead ) ? self::get_field_value( $source_field, $field_values ) : self::get_lead_field_value( $lead, $source_field );
 
-			// if rule fieldId is input specific, get the specified input's value
-			if( is_array( $field_value ) && isset( $field_value[ $rule['fieldId'] ] ) ) {
-				$field_value = rgar( $field_value, $rule['fieldId'] );
-			}
-
 			$is_value_match = self::is_value_match( $field_value, $rule['value'], $rule['operator'], $source_field, $rule, $form );
 
 			if ( $is_value_match ) {
@@ -3234,10 +3229,12 @@ class GFFormsModel {
 
 		// inserting post
 		GFCommon::log_debug( 'GFFormsModel::create_post(): Inserting post via wp_insert_post().' );
-		$post_id = wp_insert_post( $post_data );
-		GFCommon::log_debug( "GFFormsModel::create_post(): Result from wp_insert_post(): {$post_id}." );
+		$post_id = wp_insert_post( $post_data, true );
+		GFCommon::log_debug( 'GFFormsModel::create_post(): Result from wp_insert_post(): ' . print_r( $post_id, 1 ) );
 
 		if ( is_wp_error( $post_id ) ) {
+			GFCommon::log_debug( __METHOD__ . '(): $post_data => ' . print_r( $post_data, 1 ) );
+
 			return false;
 		}
 
@@ -3301,7 +3298,7 @@ class GFFormsModel {
 				$custom_field = self::get_custom_field( $form, $meta_name, $meta_index );
 
 				//replacing template variables if template is enabled
-				if ( $custom_field && rgget( 'customFieldTemplateEnabled', $custom_field ) ) {
+				if ( $custom_field && $custom_field->customFieldTemplateEnabled ) {
 					$value = self::process_post_template( $custom_field['customFieldTemplate'], 'post_custom_field', $post_images, $post_data, $form, $lead );
 				}
 				switch ( RGFormsModel::get_input_type( $custom_field ) ) {
