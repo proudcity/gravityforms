@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.19
+	- Fixed an issue with option currency formatting with decimal comma separator.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.18
+    - Fixed an issue with total field formatting on currencies with decimal comma separator.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.1.1.17
     - Fixed an issue with the processing of custom fields during post creation which prevented the content template being processed.
 

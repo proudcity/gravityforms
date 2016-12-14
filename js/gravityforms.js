@@ -344,7 +344,7 @@ function gformCalculateTotalPrice(formId){
     if( totalElement.length > 0 ) {
 
         var currentTotal = totalElement.next().val(),
-            formattedTotal = gformFormatMoney(price);
+            formattedTotal = gformFormatMoney(price, true);
 
         if (currentTotal != price) {
             totalElement.next().val(price).change();
@@ -577,7 +577,7 @@ function gformGetPriceDifference(currentPrice, newPrice){
 
     //getting price difference
     var diff = parseFloat(newPrice) - parseFloat(currentPrice);
-    price = gformFormatMoney(diff);
+    price = gformFormatMoney(diff, true);
     if(diff > 0)
         price = "+" + price;
 
