@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------
+Version 3.1.5
+    - Fixed Survey field settings referencing incorrect icon URLs.
+
+---------------------------------------------------------------------
 Version 3.1.4
     - Fixed an issue with the Likert field markup.
 

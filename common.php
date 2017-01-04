@@ -2097,7 +2097,7 @@ class GFCommon {
 			$version_info = null;
 		}
 
-		if ( isset( $version_info['headers'] ) ) {
+		if ( is_wp_error( $version_info ) || isset( $version_info['headers'] ) ) {
 			// Legacy ( < 2.1.1.14 ) version info contained the whole raw response.
 			$version_info = null;
 		}
@@ -4991,6 +4991,11 @@ class GFCategoryWalker extends Walker {
 			$pad .= '&nbsp;';
 		}
 		$object->name = "{$pad}{$object->name}";
+
+		if( empty( $output ) ){
+			$output = array();
+		}
+
 		$output[]     = $object;
 	}
 }

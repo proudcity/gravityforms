@@ -1,4 +1,37 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.26
+	- Fixed conflict when reCaptcha script is enqueued by other plugins and themes.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.25
+    - Fixed an issue where the partial entry was not available to the gform_review_page filter when resuming an incomplete submission.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.24
+	- Fixed fatal error on PHP 7.1
+	- Fixed PHP warning on the entry list page if the value retrieved from the gform_entries_screen_options user option is not an array.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.23
+    - Added the gform_secure_file_download_is_https filter which can be used to prevent file upload urls from being changed from http to https when SSL is enabled. Credit: Chris Wiegman.
+    - Added the gform_fileupload_entry_value_file_path filter allowing the file upload url to be overridden when the field values are being prepared for output for the entry detail page and {all_fields} merge tag. Credit: Chris Wiegman.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.22
+    - Fixed a fatal error which would occur with 2.1.1.14+ if the cached version info contained a WP_Error.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.21
+	- Added gform_include_bom_export_entries filter allowing the BOM character to be excluded from entry export files.
+
+------------------------------------------------------------------------------------------------------------------
+Version 2.1.1.20
+    - Added the gform_purge_expired_incomplete_submissions_query filter allowing the query used to purge expired incomplete (save and continue) submissions to be overridden.
+    - Fixed file size limit validation message not appearing when a validation message already exists.
+    - Updated the minimum version of WordPress required for support to 4.6.
+    - Updated the Afrikaans translation filename.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.1.1.19
 	- Fixed an issue with option currency formatting with decimal comma separator.
 
