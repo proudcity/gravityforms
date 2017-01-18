@@ -246,7 +246,7 @@ class GF_Field_FileUpload extends GF_Field {
 			foreach ( $file_urls as $file_index => $file_url ) {
 
 				/**
-				 * Allow for override of SSL replacement
+				 * Allow for override of SSL replacement.
 				 *
 				 * By default Gravity Forms will attempt to determine if the schema of the URL should be overwritten for SSL.
 				 * This is not ideal for all situations, particularly domain mapping. Setting $field_ssl to false will prevent
@@ -474,8 +474,6 @@ class GF_Field_FileUpload extends GF_Field {
 					}
 
 					/**
-					 * Filter output file path
-					 *
 					 * Allows for the filtering of the file path before output.
 					 *
 					 * @since 2.1.1.23

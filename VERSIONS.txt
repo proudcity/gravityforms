@@ -1,4 +1,4 @@
-gravityforms 2.1.1.26
+gravityforms 2.1.2.4
 gravityformsmailchimp 4.1
 gravityformspaypalpaymentspro 2.1
 gravityformspaypalpro 1.7

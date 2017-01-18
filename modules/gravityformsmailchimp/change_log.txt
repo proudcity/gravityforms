@@ -1,4 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 4.1.1
+    - Fixed an issue with the field value used for interest category logic evaluation.
+
+------------------------------------------------------------------------------------------------------------------
 Version 4.1
     - Added additional error logging when creating a subscription.
     - Added support for configuring a note to be added to the subscriber.

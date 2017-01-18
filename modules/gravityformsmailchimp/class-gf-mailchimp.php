@@ -1550,7 +1550,7 @@ class GFMailChimp extends GFFeedAddOn {
 
 		} else {
 
-			$field_value    = $this->get_field_value( $form, $entry, $category['field'] );
+			$field_value    = GFFormsModel::get_lead_field_value( $entry, $field );
 			$is_value_match = GFFormsModel::is_value_match( $field_value, $category['value'], $category['operator'], $field );
 			$this->log_debug( __METHOD__ . "(): Add to interest category if field #{$category['field']} value {$category['operator']} '{$category['value']}'. Is value match? " . var_export( $is_value_match, 1 ) );
 

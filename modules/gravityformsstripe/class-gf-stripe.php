@@ -634,7 +634,7 @@ class GFStripe extends GFPaymentAddOn {
 
 			$receipt_settings = array(
 				'name'    => 'receipt',
-				'label'   => 'Stripe Receipt',
+				'label'   => esc_html__( 'Stripe Receipt', 'gravityformsstripe' ),
 				'type'    => 'receipt',
 				'tooltip' => '<h6>' . esc_html__( 'Stripe Receipt', 'gravityformsstripe' ) . '</h6>' . esc_html__( 'Stripe can send a receipt via email upon payment. Select an email field to enable this feature.', 'gravityformsstripe' ),
 			);
@@ -2090,6 +2090,11 @@ class GFStripe extends GFPaymentAddOn {
 
 		// Set Stripe API key.
 		\Stripe\Stripe::setApiKey( $this->get_secret_api_key() );
+
+		if ( method_exists( '\Stripe\Stripe', 'setAppInfo' ) ) {
+			// Send plugin title, version and site url along with API calls.
+			\Stripe\Stripe::setAppInfo( $this->_title, $this->_version, esc_url( site_url() ) );
+		}
 
 		/**
 		 * Run post Stripe API initialization action.

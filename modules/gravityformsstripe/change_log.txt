@@ -1,6 +1,12 @@
 ---------------------------------------------------
-Version 2.1.1
+Version 2.2.1
+    - Fixed a fatal error which could occur if an older version of the Stripe API library is loaded by another plugin.
+
+---------------------------------------------------
+Version 2.2
     - Added $meta_key as the fifth parameter of the gform_stripe_field_value filter, containing the custom meta key currently being processed.
+	- Updated string "Stripe Receipt" so it could be translated.
+    - Updated Stripe API library to version 4.3.0.
 
 ---------------------------------------------------
 Version 2.1
