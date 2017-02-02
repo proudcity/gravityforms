@@ -1,4 +1,8 @@
 ---------------------------------------------------
+Version 2.2.2
+	- Added the gform_stripe_charge_pre_create filter. See https://www.gravityhelp.com/documentation/article/gform_stripe_charge_pre_create/
+
+---------------------------------------------------
 Version 2.2.1
     - Fixed a fatal error which could occur if an older version of the Stripe API library is loaded by another plugin.
 

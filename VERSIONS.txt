@@ -1,8 +1,8 @@
-gravityforms 2.1.2.4
-gravityformsmailchimp 4.1.1
+gravityforms 2.1.2.12
+gravityformsmailchimp 4.1.2
 gravityformspaypalpaymentspro 2.1
 gravityformspaypalpro 1.7
 gravityformssignature 3.3
-gravityformsstripe 2.2.1
+gravityformsstripe 2.2.2
 gravityformszapier 2.1
 gravityformssurvey 3.2

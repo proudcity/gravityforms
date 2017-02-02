@@ -1132,7 +1132,7 @@ class GFMailChimp extends GFFeedAddOn {
 		$note = GFCommon::replace_variables( $subscription['note'], $form, $entry, false, true, false, 'text' );
 		unset( $subscription['note'] );
 
-		$action = $member_found ? 'added' : 'updated';
+		$action = $member_found ? 'updated' : 'added';
 
 		try {
 

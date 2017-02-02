@@ -284,21 +284,30 @@ class GF_MailChimp_API {
 		// Decode response body.
 		$response['body'] = json_decode( $response['body'], true );
 
-		// If status code is set, throw exception.
-		if ( isset( $response['body']['status'] ) && isset( $response['body']['title'] ) ) {
+		// Get the response code.
+		$response_code = wp_remote_retrieve_response_code( $response );
 
-			// Initialize exception.
-			$exception = new GF_MailChimp_Exception( $response['body']['title'], $response['body']['status'] );
+		if ( $response_code != 200 ) {
 
-			// Add detail.
-			$exception->setDetail( $response['body']['detail'] );
+			// If status code is set, throw exception.
+			if ( isset( $response['body']['status'] ) && isset( $response['body']['title'] ) ) {
 
-			// Add errors if available.
-			if ( isset( $response['body']['errors'] ) ) {
-				$exception->setErrors( $response['body']['errors'] );
+				// Initialize exception.
+				$exception = new GF_MailChimp_Exception( $response['body']['title'], $response['body']['status'] );
+
+				// Add detail.
+				$exception->setDetail( $response['body']['detail'] );
+
+				// Add errors if available.
+				if ( isset( $response['body']['errors'] ) ) {
+					$exception->setErrors( $response['body']['errors'] );
+				}
+
+				throw $exception;
+
 			}
 
-			throw $exception;
+			throw new Exception( wp_remote_retrieve_response_message( $response ), $response_code );
 
 		}
 

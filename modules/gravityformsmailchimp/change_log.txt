@@ -1,4 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 4.1.2
+	- Fixed API response error handling; API key was incorrectly shown as valid when a 403 Forbidden error was returned.
+
+------------------------------------------------------------------------------------------------------------------
 Version 4.1.1
     - Fixed an issue with the field value used for interest category logic evaluation.
 
