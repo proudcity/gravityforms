@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 4.1.4
+	- Fixed an issue which could prevent the feed groups being converted to interest categories when upgrading from older versions of the add-on.
+
+------------------------------------------------------------------------------------------------------------------
+Version 4.1.3
+	- Added additional logging when checking if a user's subscription status.
+	- Fixed inability to use double opt-in with existing memebers.
+	- Re-introduced support for "gform_mailchimp_keep_existing_groups" filter.
+	- Restored GFMailChimp::get_group_setting_key() for use when upgrading from older versions of MailChimp Add-On.
+
+------------------------------------------------------------------------------------------------------------------
 Version 4.1.2
 	- Fixed API response error handling; API key was incorrectly shown as valid when a 403 Forbidden error was returned.
 

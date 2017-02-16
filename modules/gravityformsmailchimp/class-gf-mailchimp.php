@@ -1022,6 +1022,9 @@ class GFMailChimp extends GFFeedAddOn {
 			// Set member status.
 			$member_status = $member['status'];
 
+			// Log member status.
+			$this->log_debug( __METHOD__ . "(): $email was found on list. Status: $member_status" );
+
 		} catch ( Exception $e ) {
 
 			// If the exception code is not 404, abort feed processing.
@@ -1033,6 +1036,9 @@ class GFMailChimp extends GFFeedAddOn {
 				return $entry;
 
 			}
+
+			// Log member status.
+			$this->log_debug( __METHOD__ . "(): $email was not found on list." );
 
 		}
 
@@ -1074,6 +1080,39 @@ class GFMailChimp extends GFFeedAddOn {
 		$transaction = $member_found ? 'Update' : 'Subscribe';
 
 		/**
+		 * Modify whether a user that is already subscribed to your list has their groups replaced when submitting the form a second time.
+		 *
+		 * @since 1.9
+		 *
+		 * @param bool   $keep_existing_interests Should user keep existing interest categories?
+		 * @param array  $form                    The form object.
+		 * @param array  $entry                   The entry object.
+		 * @param array  $feed                    The feed object.
+		 */
+		$keep_existing_interests = gf_apply_filters( array( 'gform_mailchimp_keep_existing_groups', $form['id'] ), true, $form, $entry, $feed );
+
+		// If member was found and we are not keeping existing interest categories, remove them.
+		if ( $member_found && ! $keep_existing_interests ) {
+
+			// Get existing interests.
+			$existing_interests = $member['interests'];
+
+			// Loop through existing interests.
+			foreach ( $existing_interests as $interest_id => $interest_enabled ) {
+
+				// If interest is not enabled, skip it.
+				if ( ! $interest_enabled ) {
+					continue;
+				}
+
+				// Disable interest in new subscription.
+				$subscription['interests'][ $interest_id ] = false;
+
+			}
+
+		}
+
+		/**
 		 * Modify the subscription object before it is executed.
 		 *
 		 * @deprecated 4.0 @use gform_mailchimp_subscription
@@ -1091,7 +1130,7 @@ class GFMailChimp extends GFFeedAddOn {
 		unset( $subscription['merge_vars'] );
 
 		// Convert double optin.
-		$subscription['status'] = $subscription['double_optin'] && ! $member_found ? 'pending' : 'subscribed';
+		$subscription['status'] = $subscription['double_optin'] ? 'pending' : $subscription['status'];
 		unset( $subscription['double_optin'] );
 
 		// Extract list ID.
@@ -1117,7 +1156,7 @@ class GFMailChimp extends GFFeedAddOn {
 		if ( empty( $subscription['merge_fields'] ) ) {
 			unset( $subscription['merge_fields'] );
 		}
-		
+
 		// Remove interests if none are defined.
 		if ( empty( $subscription['interests'] ) ) {
 			unset( $subscription['interests'] );
@@ -1670,6 +1709,9 @@ class GFMailChimp extends GFFeedAddOn {
 		// Get MailChimp feeds.
 		$feeds = $this->get_feeds();
 
+		$list_interest_categories    = array();
+		$interest_category_interests = array();
+
 		// Loop through MailChimp feeds.
 		foreach ( $feeds as $feed ) {
 
@@ -1683,8 +1725,14 @@ class GFMailChimp extends GFFeedAddOn {
 
 			try {
 
-				// Get interest categories for list.
-				$interest_categories = $this->api->get_list_interest_categories( $feed['meta']['mailchimpList'] );
+				$list_id = $feed['meta']['mailchimpList'];
+
+				if ( ! isset( $list_interest_categories[ $list_id ] ) ) {
+					// Get interest categories for list.
+					$list_interest_categories[ $list_id ] = $this->api->get_list_interest_categories( $list_id );
+				}
+
+				$interest_categories = rgar( $list_interest_categories, $list_id, array() );
 
 			} catch ( Exception $e ) {
 
@@ -1698,8 +1746,14 @@ class GFMailChimp extends GFFeedAddOn {
 			// Loop through interest categories.
 			foreach ( $interest_categories as $interest_category ) {
 
-				// Get interests for interest category.
-				$interests = $this->api->get_interest_category_interests( $feed['meta']['mailchimpList'], $interest_category['id'] );
+				$category_id = $interest_category['id'];
+
+				if ( ! isset( $interest_category_interests[ $category_id ] ) ) {
+					// Get interests for interest category.
+					$interest_category_interests[ $category_id ] = $this->api->get_interest_category_interests( $list_id, $category_id );
+				}
+
+				$interests = rgar( $list_interest_categories, $category_id, array() );
 
 				// Loop through interests.
 				foreach ( $interests as $interest ) {
@@ -2023,6 +2077,34 @@ class GFMailChimp extends GFFeedAddOn {
 
 		return $results;
 
+	}
+
+	/**
+	 * Retrieve the group setting key.
+	 *
+	 * @param string $grouping_id The group ID.
+	 * @param string $group_name The group name.
+	 *
+	 * @return string
+	 */
+	public function get_group_setting_key( $grouping_id, $group_name ) {
+
+		$plugin_settings = GFCache::get( 'mailchimp_plugin_settings' );
+		if ( empty( $plugin_settings ) ) {
+			$plugin_settings = $this->get_plugin_settings();
+			GFCache::set( 'mailchimp_plugin_settings', $plugin_settings );
+		}
+
+		$key = 'group_key_' . $grouping_id . '_' . str_replace( '%', '', sanitize_title_with_dashes( $group_name ) );
+
+		if ( ! isset( $plugin_settings[ $key ] ) ) {
+			$group_key               = sanitize_key( uniqid( 'mc_group_', true ) );
+			$plugin_settings[ $key ] = $group_key;
+			$this->update_plugin_settings( $plugin_settings );
+			GFCache::set( 'mailchimp_plugin_settings', $plugin_settings );
+		}
+
+		return $plugin_settings[ $key ];
 	}
 
 }

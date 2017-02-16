@@ -1,4 +1,12 @@
 ---------------------------------------------------
+Version 2.2.4
+	- Fixed spinner appearing when the previous button on the last page of a multi-page non-AJAX form is clicked.
+
+---------------------------------------------------
+Version 2.2.3
+	- Fixed Stripe.js request being made when the previous button on the last page of a multi-page form is clicked.
+
+---------------------------------------------------
 Version 2.2.2
 	- Added the gform_stripe_charge_pre_create filter. See https://www.gravityhelp.com/documentation/article/gform_stripe_charge_pre_create/
 
