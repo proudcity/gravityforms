@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 4.1.6
+	- Restored double opt-in support for members who are being resubscribed to a list they are unsubscribed from.
+
+------------------------------------------------------------------------------------------------------------------
+Version 4.1.5
+	- Disabled double opt-in support for members who are being resubscribed to a list they are unsubscribed from. (Member will be automatically subscribed to the list. This is a temporary workaround for an issue with the MailChimp API.)
+
+------------------------------------------------------------------------------------------------------------------
 Version 4.1.4
 	- Fixed an issue which could prevent the feed groups being converted to interest categories when upgrading from older versions of the add-on.
 
