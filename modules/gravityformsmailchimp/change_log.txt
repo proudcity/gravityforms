@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 4.1.9
+	- Added existing member object as sixth parameter of "gform_mailchimp_subscription" filter.
+
+------------------------------------------------------------------------------------------------------------------
+Version 4.1.8
+	- Fixed existing interest categories not being properly associated to subscription object.
+
+------------------------------------------------------------------------------------------------------------------
+Version 4.1.7
+	- Fixed an issue with subscriptions not being created due to empty merge fields.
+
+------------------------------------------------------------------------------------------------------------------
 Version 4.1.6
 	- Restored double opt-in support for members who are being resubscribed to a list they are unsubscribed from.
 

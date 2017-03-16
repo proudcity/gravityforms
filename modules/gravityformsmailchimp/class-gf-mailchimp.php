@@ -961,6 +961,11 @@ class GFMailChimp extends GFFeedAddOn {
 		// Loop through field map.
 		foreach ( $field_map as $name => $field_id ) {
 
+			// If no field is mapped, skip it.
+			if ( rgblank( $field_id ) ) {
+				continue;
+			}
+
 			// If this is the email field, skip it.
 			if ( strtoupper( $name ) === 'EMAIL' ) {
 				continue;
@@ -984,27 +989,8 @@ class GFMailChimp extends GFFeedAddOn {
 
 		}
 
-		// Initialize interests array.
-		$interests = array();
-
-		// Get interest categories.
-		$categories = $this->get_feed_interest_categories( $feed );
-
-		// Loop through categories.
-		foreach ( $categories as $category_id => $category_meta ) {
-
-			// Log that we are evaluating the category conditions.
-			$this->log_debug( __METHOD__ . '(): Evaluating condition for interest category "' . $category_id . '": ' . print_r( $category_meta, true ) );
-
-			// Get condition evaluation.
-			$condition_evaluation = $this->is_category_condition_met( $category_meta, $form, $entry );
-
-			// Set interest category based on evaluation.
-			$interests[ $category_id ] = $condition_evaluation;
-
-		}
-
-		// Define initial member found and member status variables.
+		// Define initial member, member found and member status variables.
+		$member        = false;
 		$member_found  = false;
 		$member_status = null;
 
@@ -1059,6 +1045,77 @@ class GFMailChimp extends GFFeedAddOn {
 			return;
 		}
 
+		// Initialize interests array.
+		$interests = $member_found ? $member['interests'] : array();
+
+		/**
+		 * Modify whether a user that is already subscribed to your list has their groups replaced when submitting the form a second time.
+		 *
+		 * @since 1.9
+		 *
+		 * @param bool   $keep_existing_interests Should user keep existing interest categories?
+		 * @param array  $form                    The form object.
+		 * @param array  $entry                   The entry object.
+		 * @param array  $feed                    The feed object.
+		 */
+		$keep_existing_interests = gf_apply_filters( array( 'gform_mailchimp_keep_existing_groups', $form['id'] ), true, $form, $entry, $feed );
+
+		// Initialize interests to keep array.
+		$interests_to_keep = array();
+
+		// If member was found and we are not keeping existing interest categories, remove them.
+		if ( $member_found ) {
+
+			// Get existing interests.
+			$existing_interests = $member['interests'];
+
+			// Loop through existing interests.
+			foreach ( $existing_interests as $interest_id => $interest_enabled ) {
+
+				// If interest is not enabled, skip it.
+				if ( ! $interest_enabled ) {
+					continue;
+				}
+
+				// If we are keeping existing interests, add to array.
+				if ( $keep_existing_interests ) {
+
+					$interests_to_keep[] = $interest_id;
+					continue;
+
+				} else if ( ! $keep_existing_interests ) {
+
+					// Disable interest in new subscription.
+					$interests[ $interest_id ] = false;
+
+				}
+
+			}
+
+		}
+
+		// Get interest categories.
+		$categories = $this->get_feed_interest_categories( $feed );
+
+		// Loop through categories.
+		foreach ( $categories as $category_id => $category_meta ) {
+
+			// If category is not enabled or the category is one we are keeping, skip it.
+			if ( ! rgar( $category_meta, 'enabled' ) || in_array( $category_id, $interests_to_keep ) ) {
+				continue;
+			}
+
+			// Log that we are evaluating the category conditions.
+			$this->log_debug( __METHOD__ . '(): Evaluating condition for interest category "' . $category_id . '": ' . print_r( $category_meta, true ) );
+
+			// Get condition evaluation.
+			$condition_evaluation = $this->is_category_condition_met( $category_meta, $form, $entry );
+
+			// Set interest category based on evaluation.
+			$interests[ $category_id ] = $condition_evaluation;
+
+		}
+
 		// If member status is not defined, set to subscribed.
 		$member_status = isset( $member_status ) ? $member_status : 'subscribed';
 
@@ -1078,39 +1135,6 @@ class GFMailChimp extends GFFeedAddOn {
 
 		// Prepare transaction type for filter.
 		$transaction = $member_found ? 'Update' : 'Subscribe';
-
-		/**
-		 * Modify whether a user that is already subscribed to your list has their groups replaced when submitting the form a second time.
-		 *
-		 * @since 1.9
-		 *
-		 * @param bool   $keep_existing_interests Should user keep existing interest categories?
-		 * @param array  $form                    The form object.
-		 * @param array  $entry                   The entry object.
-		 * @param array  $feed                    The feed object.
-		 */
-		$keep_existing_interests = gf_apply_filters( array( 'gform_mailchimp_keep_existing_groups', $form['id'] ), true, $form, $entry, $feed );
-
-		// If member was found and we are not keeping existing interest categories, remove them.
-		if ( $member_found && ! $keep_existing_interests ) {
-
-			// Get existing interests.
-			$existing_interests = $member['interests'];
-
-			// Loop through existing interests.
-			foreach ( $existing_interests as $interest_id => $interest_enabled ) {
-
-				// If interest is not enabled, skip it.
-				if ( ! $interest_enabled ) {
-					continue;
-				}
-
-				// Disable interest in new subscription.
-				$subscription['interests'][ $interest_id ] = false;
-
-			}
-
-		}
 
 		/**
 		 * Modify the subscription object before it is executed.
@@ -1144,13 +1168,14 @@ class GFMailChimp extends GFFeedAddOn {
 		/**
 		 * Modify the subscription object before it is executed.
 		 *
-		 * @param array  $subscription Subscription arguments.
-		 * @param string $list_id      MailChimp list ID.
-		 * @param array  $form         The form object.
-		 * @param array  $entry        The entry object.
-		 * @param array  $feed         The feed object.
+		 * @param array       $subscription Subscription arguments.
+		 * @param string      $list_id      MailChimp list ID.
+		 * @param array       $form         The form object.
+		 * @param array       $entry        The entry object.
+		 * @param array       $feed         The feed object.
+		 * @param array|false $member       The existing member object. (False if member does not currently exist in MailChimp.)
 		 */
-		$subscription = gf_apply_filters( array( 'gform_mailchimp_subscription', $form['id'] ), $subscription, $list_id, $form, $entry, $feed );
+		$subscription = gf_apply_filters( array( 'gform_mailchimp_subscription', $form['id'] ), $subscription, $list_id, $form, $entry, $feed, $member );
 
 		// Remove merge_fields if none are defined.
 		if ( empty( $subscription['merge_fields'] ) ) {
@@ -1571,11 +1596,13 @@ class GFMailChimp extends GFFeedAddOn {
 		if ( ! $category['enabled'] ) {
 
 			$this->log_debug( __METHOD__ . '(): Interest category not enabled. Returning false.' );
+
 			return false;
 
-		} elseif ( $category['decision'] == 'always' ) {
+		} else if ( $category['decision'] == 'always' ) {
 
 			$this->log_debug( __METHOD__ . '(): Interest category decision is always. Returning true.' );
+
 			return true;
 
 		}
@@ -1585,15 +1612,18 @@ class GFMailChimp extends GFFeedAddOn {
 		if ( ! is_object( $field ) ) {
 
 			$this->log_debug( __METHOD__ . "(): Field #{$category['field']} not found. Returning true." );
+
 			return true;
 
 		} else {
 
 			$field_value    = GFFormsModel::get_lead_field_value( $entry, $field );
-			$is_value_match = GFFormsModel::is_value_match( $field_value, $category['value'], $category['operator'], $field );
+			$is_value_match = GFFormsModel::is_value_match( $field_value, $category['value'], $category['operator'] );
+
 			$this->log_debug( __METHOD__ . "(): Add to interest category if field #{$category['field']} value {$category['operator']} '{$category['value']}'. Is value match? " . var_export( $is_value_match, 1 ) );
 
 			return $is_value_match;
+
 		}
 
 	}
