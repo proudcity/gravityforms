@@ -763,6 +763,8 @@ function gformAddListItem( addButton, max ) {
     gformToggleIcons( $container, max );
     gformAdjustClasses( $container );
 
+    gform.doAction( 'gform_list_post_item_add', $clone, $container );
+
 }
 
 function gformDeleteListItem( deleteButton, max ) {
@@ -775,6 +777,8 @@ function gformDeleteListItem( deleteButton, max ) {
 
     gformToggleIcons( $container, max );
     gformAdjustClasses( $container );
+ 
+    gform.doAction( 'gform_list_post_item_delete', $container );
 
 }
 
